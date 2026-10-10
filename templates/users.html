@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کاربران - {{ panel_name }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🐾 CatWoman</div>
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        </div>
+    </header>
+    
+    <div class="overlay" onclick="toggleMenu()"></div>
+    <nav class="nav-menu">
+        <a href="/dashboard" class="nav-item">📊 داشبورد</a>
+        <a href="/users" class="nav-item active">👥 کاربران</a>
+        <a href="/users/add" class="nav-item">➕ ساخت کاربر</a>
+        <a href="/logout" class="nav-item">🚪 خروج</a>
+    </nav>
+    
+    <div class="container">
+        <h1 class="page-title">👥 لیست کاربران</h1>
+        
+        <a href="/users/add" class="btn btn-primary btn-block" style="margin-bottom: 20px;">➕ ساخت کاربر جدید</a>
+        
+        {% if users %}
+            {% for user in users %}
+            <div class="user-card">
+                <div class="user-head">
+                    <div>
+                        <span class="user-emoji">{{ user.emoji }}</span>
+                        <span class="user-name">{{ user.username }}</span>
+                    </div>
+                    {% if user.status == 'active' %}
+                        <span class="status-badge status-active">✅ فعال</span>
+                    {% elif user.status == 'data_exhausted' %}
+                        <span class="status-badge status-disabled">📊 حجم تمام</span>
+                    {% elif user.status == 'expired' %}
+                        <span class="status-badge status-disabled">⏰ منقضی</span>
+                    {% else %}
+                        <span class="status-badge status-disabled">⛔ غیرفعال</span>
+                    {% endif %}
+                </div>
+                
+                {% if user.description %}
+                <div style="color: #ffb8e0; font-size: 13px; margin-bottom: 10px;">📝 {{ user.description }}</div>
+                {% endif %}
+                
+                <div class="user-info">
+                    <div class="info-item">
+                        <div class="info-label">💾 حجم کل</div>
+                        <div class="info-value">
+                            {% if user.data_limit > 0 %}
+                                {{ format_bytes(user.data_limit) }}
+                            {% else %}
+                                نامحدود
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">📊 مصرف شده</div>
+                        <div class="info-value">{{ format_bytes(user.data_used) }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">⏰ انقضا</div>
+                        <div class="info-value">{{ days_remaining(user.expiry_date) }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🔗 پروتکل</div>
+                        <div class="info-value">{{ user.protocol|upper }}</div>
+                    </div>
+                </div>
+                
+                {% if user.data_limit > 0 %}
+                <div class="progress">
+                    {% set percent = (user.data_used / user.data_limit * 100)|round|int %}
+                    <div class="progress-bar" style="width: {{ percent if percent < 100 else 100 }}%"></div>
+                </div>
+                {% endif %}
+                
+                <div class="user-actions">
+                    <a href="/sub/{{ user.sub_token }}" target="_blank" class="btn btn-primary">🔗 ساب</a>
+                    <a href="/users/edit/{{ user.id }}" class="btn btn-warning">✏️ ویرایش</a>
+                    <a href="/users/reset/{{ user.id }}" class="btn btn-success">🔄 ریست</a>
+                    <a href="/users/toggle/{{ user.id }}" class="btn btn-ghost">⚡</a>
+                    <a href="/users/delete/{{ user.id }}" class="btn btn-danger" onclick="return confirm('حذف این کاربر؟')">🗑</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">🐱</div>
+                <p style="margin-top: 20px; font-size: 16px;">هنوز کاربری ساخته نشده!</p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            document.querySelector('.overlay').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
