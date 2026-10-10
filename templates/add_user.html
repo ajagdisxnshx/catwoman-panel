@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساخت کاربر - {{ panel_name }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🐾 CatWoman</div>
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        </div>
+    </header>
+    
+    <div class="overlay" onclick="toggleMenu()"></div>
+    <nav class="nav-menu">
+        <a href="/dashboard" class="nav-item">📊 داشبورد</a>
+        <a href="/users" class="nav-item">👥 کاربران</a>
+        <a href="/users/add" class="nav-item active">➕ ساخت کاربر</a>
+        <a href="/logout" class="nav-item">🚪 خروج</a>
+    </nav>
+    
+    <div class="container">
+        <h1 class="page-title">➕ ساخت کاربر جدید</h1>
+        
+        <form method="POST" action="/users/add">
+            <!-- اطلاعات اصلی -->
+            <div class="form-section">
+                <div class="form-section-title">📋 اطلاعات اصلی</div>
+                
+                <div class="form-group">
+                    <label class="form-label">👤 نام کاربری *</label>
+                    <input type="text" name="username" class="form-control" required placeholder="catuser1">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">😺 ایموجی</label>
+                    <input type="text" name="emoji" class="form-control" value="😺" placeholder="😺">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">📝 توضیحات</label>
+                    <textarea name="description" class="form-control" placeholder="توضیحات کوتاه..."></textarea>
+                </div>
+            </div>
+            
+            <!-- محدودیت‌ها -->
+            <div class="form-section">
+                <div class="form-section-title">⚙️ محدودیت‌ها</div>
+                
+                <div class="form-group">
+                    <label class="form-label">💾 حجم (گیگابایت) - 0 = نامحدود</label>
+                    <input type="number" name="data_limit" class="form-control" value="10" min="0" step="0.1">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">⏰ مدت زمان (روز) - 0 = نامحدود</label>
+                    <input type="number" name="expiry_days" class="form-control" value="30" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">🌐 محدودیت IP - 0 = نامحدود</label>
+                    <input type="number" name="ip_limit" class="form-control" value="0" min="0">
+                </div>
+            </div>
+            
+            <!-- تنظیمات پروتکل -->
+            <div class="form-section">
+                <div class="form-section-title">🔗 تنظیمات پروتکل</div>
+                
+                <div class="form-group">
+                    <label class="form-label">📡 پروتکل</label>
+                    <select name="protocol" class="form-control">
+                        <option value="vless">VLESS (پیشنهادی)</option>
+                        <option value="vmess">VMess</option>
+                        <option value="trojan">Trojan</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">🌊 Flow</label>
+                    <select name="flow" class="form-control">
+                        <option value="">هیچکدام</option>
+                        <option value="xtls-rprx-vision">XTLS Vision</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- اطلاعات تکمیلی -->
+            <div class="form-section">
+                <div class="form-section-title">📎 اطلاعات تکمیلی</div>
+                
+                <div class="form-group">
+                    <label class="form-label">💬 آیدی تلگرام</label>
+                    <input type="text" name="telegram_id" class="form-control" placeholder="@username">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">📒 یادداشت ادمین</label>
+                    <textarea name="note" class="form-control" placeholder="یادداشت فقط برای ادمین..."></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">💗 ایجاد کاربر 💗</button>
+            <a href="/users" class="btn btn-ghost btn-block" style="margin-top: 10px;">بازگشت</a>
+        </form>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            document.querySelector('.overlay').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
