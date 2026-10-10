@@ -1,11 +1,9 @@
-import os
-
-# تنظیمات ادمین
-ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "catwoman123")
+# تنظیمات پیش‌فرض ادمین (بدون نیاز به Variable)
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin"
 
 # کلید رمزنگاری سشن
-SECRET_KEY = os.getenv("SECRET_KEY", "catwoman-super-secret-key-2024")
+SECRET_KEY = "catwoman-super-secret-key-2024-neon-pink"
 
 # تنظیمات Xray
 XRAY_CONFIG_PATH = "/usr/local/etc/xray/config.json"
