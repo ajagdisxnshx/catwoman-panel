@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد - {{ panel_name }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🐾 CatWoman</div>
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        </div>
+    </header>
+    
+    <div class="overlay" onclick="toggleMenu()"></div>
+    <nav class="nav-menu">
+        <a href="/dashboard" class="nav-item active">📊 داشبورد</a>
+        <a href="/users" class="nav-item">👥 کاربران</a>
+        <a href="/users/add" class="nav-item">➕ ساخت کاربر</a>
+        <a href="/logout" class="nav-item">🚪 خروج</a>
+    </nav>
+    
+    <div class="container">
+        <h1 class="page-title">💗 داشبورد مدیریت 💗</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value">{{ stats.total_users }}</div>
+                <div class="stat-label">کل کاربران</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value">{{ stats.active_users }}</div>
+                <div class="stat-label">کاربر فعال</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">❌</div>
+                <div class="stat-value">{{ stats.disabled_users }}</div>
+                <div class="stat-label">کاربر غیرفعال</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" style="font-size: 16px;">{{ format_bytes(stats.total_traffic) }}</div>
+                <div class="stat-label">ترافیک مصرفی</div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-section-title">⚡ وضعیت سرور</div>
+            {% if xray_status %}
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 50px; filter: drop-shadow(0 0 15px #00ff9d);">🟢</div>
+                <div style="color: #00ff9d; font-size: 18px; font-weight: 900; margin-top: 10px;">هسته Xray فعال است</div>
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 50px; filter: drop-shadow(0 0 15px #ff3860);">🔴</div>
+                <div style="color: #ff3860; font-size: 18px; font-weight: 900; margin-top: 10px;">هسته Xray خاموش است</div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <a href="/users/add" class="btn btn-primary btn-block">➕ ساخت کاربر جدید</a>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            document.querySelector('.overlay').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
