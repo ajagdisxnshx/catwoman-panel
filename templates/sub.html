@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 {{ user.username }} - CatWoman</title>
+    <link rel="stylesheet" href="/static/sub.css">
+</head>
+<body>
+    <div class="sub-container">
+        <!-- Header -->
+        <div class="sub-header">
+            <div class="sub-logo">🐱‍👤</div>
+            <div class="sub-brand">CatWoman</div>
+            <div class="sub-username">{{ user.emoji }} {{ user.username }}</div>
+        </div>
+        
+        {% if is_active %}
+            <!-- وضعیت فعال -->
+            <div class="status-banner">✨ سرویس شما فعال است ✨</div>
+            
+            <!-- اطلاعات -->
+            <div class="info-grid">
+                <div class="info-box">
+                    <div class="info-emoji">💾</div>
+                    <div class="info-main">
+                        {% if data_limit_gb > 0 %}
+                            {{ "%.2f"|format(data_limit_gb) }} GB
+                        {% else %}
+                            ∞
+                        {% endif %}
+                    </div>
+                    <div class="info-sub">حجم کل</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-emoji">📊</div>
+                    <div class="info-main">{{ "%.2f"|format(data_used_gb) }} GB</div>
+                    <div class="info-sub">مصرف شده</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-emoji">⏰</div>
+                    <div class="info-main">{{ days_remaining(user.expiry_date) }}</div>
+                    <div class="info-sub">باقی‌مانده</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-emoji">📡</div>
+                    <div class="info-main">{{ user.protocol|upper }}</div>
+                    <div class="info-sub">پروتکل</div>
+                </div>
+            </div>
+            
+            {% if data_limit_gb > 0 %}
+            <!-- نوار مصرف -->
+            <div class="usage-section">
+                <div class="usage-title">
+                    <span>📊 میزان مصرف</span>
+                    <span>{{ "%.1f"|format(usage_percent) }}%</span>
+                </div>
+                <div class="usage-bar">
+                    <div class="usage-fill" style="width: {{ usage_percent }}%"></div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- کانفیگ -->
+            <div class="config-section">
+                <div class="config-title">🔗 کانفیگ اختصاصی شما</div>
+                <div class="config-text" id="configText">{{ config_link }}</div>
+                <button class="btn-pink" onclick="copyConfig()">📋 کپی کانفیگ</button>
+                <button class="btn-pink" onclick="copySub()" style="background: linear-gradient(135deg, #ff6ec7, #ff2d95);">🔗 کپی لینک ساب</button>
+            </div>
+            
+        {% else %}
+            <!-- وضعیت غیرفعال -->
+            <div class="expired-box">
+                <div class="expired-icon">
+                    {% if user.status == 'data_exhausted' %}📊
+                    {% elif user.status == 'expired' %}⏰
+                    {% else %}🚫{% endif %}
+                </div>
+                <div class="expired-title">سرویس غیرفعال است</div>
+                <div class="expired-text">{{ reason }}</div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ff3860;">
+                    <div style="color: #ff2d95; font-weight: 700;">
+                        📊 مصرف: {{ "%.2f"|format(data_used_gb) }} GB
+                        {% if data_limit_gb > 0 %}/ {{ "%.2f"|format(data_limit_gb) }} GB{% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- اپلیکیشن‌ها -->
+        <div class="apps-section">
+            <div class="apps-title">📱 اپلیکیشن‌های پیشنهادی</div>
+            <div class="app-item">
+                <span class="app-icon">🤖</span>
+                <span class="app-name">V2rayNG</span>
+                <span class="app-platform">اندروید</span>
+            </div>
+            <div class="app-item">
+                <span class="app-icon">🍎</span>
+                <span class="app-name">Streisand</span>
+                <span class="app-platform">آیفون</span>
+            </div>
+            <div class="app-item">
+                <span class="app-icon">💻</span>
+                <span class="app-name">v2rayN</span>
+                <span class="app-platform">ویندوز</span>
+            </div>
+            <div class="app-item">
+                <span class="app-icon">🚀</span>
+                <span class="app-name">Happ</span>
+                <span class="app-platform">همه</span>
+            </div>
+        </div>
+        
+        <div class="footer">💗 Powered by CatWoman Panel 💗</div>
+    </div>
+    
+    <script>
+        function copyConfig() {
+            const text = document.getElementById('configText').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ کانفیگ کپی شد!');
+            });
+        }
+        
+        function copySub() {
+            const subLink = window.location.href + '/raw';
+            navigator.clipboard.writeText(subLink).then(() => {
+                alert('✅ لینک ساب کپی شد!');
+            });
+        }
+    </script>
+</body>
+</html>
