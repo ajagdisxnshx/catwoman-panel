@@ -1,46 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* ======== THEME VARIABLES ======== */
+/* ======== THEME VARIABLES - 🌟 GOLDEN YELLOW THEME ======== */
 :root[data-theme="dark"] {
-    --bg-primary: #07071a;
-    --bg-secondary: #0d0b24;
-    --bg-card: rgba(20, 16, 45, 0.7);
-    --bg-input: rgba(12, 9, 30, 0.9);
-    --border-color: rgba(139, 92, 246, 0.18);
-    --border-hover: rgba(168, 85, 247, 0.55);
-    --text-primary: #ede9fe;
-    --text-secondary: #a195c7;
-    --text-muted: #6b5e8f;
-    --accent: #a855f7;
-    --accent-2: #8b5cf6;
-    --accent-3: #6366f1;
-    --accent-soft: rgba(168, 85, 247, 0.12);
-    --accent-grad: linear-gradient(135deg, #a855f7, #6366f1);
+    --bg-primary: #1a1500;
+    --bg-secondary: #251d00;
+    --bg-card: rgba(45, 36, 0, 0.6);
+    --bg-input: rgba(30, 24, 0, 0.9);
+    --border-color: rgba(255, 215, 0, 0.25);
+    --border-hover: rgba(255, 215, 0, 0.6);
+    --text-primary: #fff8dc;
+    --text-secondary: #ffd97d;
+    --text-muted: #c9a93a;
+    --accent: #ffd700;
+    --accent-2: #ffb800;
+    --accent-3: #ffea00;
+    --accent-soft: rgba(255, 215, 0, 0.15);
+    --accent-grad: linear-gradient(135deg, #ffea00, #ffb800);
     --success: #10d9a0;
     --danger: #ff4876;
-    --warning: #fbbf24;
-    --sidebar-bg: rgba(7, 7, 26, 0.95);
+    --warning: #ff9500;
+    --sidebar-bg: rgba(26, 21, 0, 0.95);
 }
 
 :root[data-theme="light"] {
-    --bg-primary: #f5f3ff;
+    --bg-primary: #fffdf0;
     --bg-secondary: #ffffff;
     --bg-card: rgba(255, 255, 255, 0.9);
-    --bg-input: #f3f0ff;
-    --border-color: rgba(139, 92, 246, 0.15);
-    --border-hover: rgba(139, 92, 246, 0.5);
-    --text-primary: #1e1b3a;
-    --text-secondary: #4a4175;
-    --text-muted: #7f74a8;
-    --accent: #7c3aed;
-    --accent-2: #6d28d9;
-    --accent-3: #4f46e5;
-    --accent-soft: rgba(124, 58, 237, 0.08);
-    --accent-grad: linear-gradient(135deg, #7c3aed, #4f46e5);
+    --bg-input: #fff9d6;
+    --border-color: rgba(255, 184, 0, 0.3);
+    --border-hover: rgba(255, 184, 0, 0.7);
+    --text-primary: #3d2f00;
+    --text-secondary: #7a5f00;
+    --text-muted: #a88e2e;
+    --accent: #ffb800;
+    --accent-2: #ff9500;
+    --accent-3: #ffd700;
+    --accent-soft: rgba(255, 184, 0, 0.15);
+    --accent-grad: linear-gradient(135deg, #ffd700, #ff9500);
     --success: #059669;
     --danger: #e11d48;
     --warning: #d97706;
-    --sidebar-bg: rgba(255, 255, 255, 0.98);
+    --sidebar-bg: rgba(255, 253, 240, 0.98);
 }
 
 * {
@@ -56,8 +56,8 @@ body {
     font-family: 'Vazirmatn', 'Plus Jakarta Sans', sans-serif;
     background: var(--bg-primary);
     background-image: 
-        radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 85% 90%, rgba(99, 102, 241, 0.12) 0%, transparent 45%);
+        radial-gradient(circle at 15% 10%, rgba(255, 215, 0, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(255, 184, 0, 0.15) 0%, transparent 45%);
     background-attachment: fixed;
     color: var(--text-primary);
     min-height: 100vh;
@@ -104,7 +104,7 @@ body[data-lang="en"] {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--accent);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
 .logo {
@@ -146,7 +146,7 @@ body[data-lang="en"] {
 
 .icon-btn svg { width: 20px; height: 20px; }
 
-/* ======== NAV MENU (Sidebar) - 📱 OPTIMIZED FOR MOBILE ======== */
+/* ======== NAV MENU (Sidebar) ======== */
 .nav-menu {
     position: fixed;
     top: 0;
@@ -154,10 +154,10 @@ body[data-lang="en"] {
     width: 85%;
     max-width: 340px;
     height: 100vh;
-    height: 100dvh; /* برای موبایل‌های جدید - ارتفاع واقعی */
+    height: 100dvh;
     background: 
-        linear-gradient(165deg, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
-        linear-gradient(345deg, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        linear-gradient(165deg, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
+        linear-gradient(345deg, rgba(255, 184, 0, 0.08) 0%, transparent 40%),
         var(--sidebar-bg);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
@@ -169,12 +169,11 @@ body[data-lang="en"] {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    box-shadow: -10px 0 50px rgba(168, 85, 247, 0.15);
+    box-shadow: -10px 0 50px rgba(255, 215, 0, 0.2);
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* اسکرول نرم روی iOS */
+    -webkit-overflow-scrolling: touch;
 }
 
-/* نوار نئونی عمودی ابتدای منو */
 .nav-menu::before {
     content: '';
     position: absolute;
@@ -183,7 +182,7 @@ body[data-lang="en"] {
     left: 0;
     width: 2px;
     background: linear-gradient(180deg, transparent, var(--accent), var(--accent-3), transparent);
-    box-shadow: 0 0 15px var(--accent), 0 0 30px rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 15px var(--accent), 0 0 30px rgba(255, 215, 0, 0.6);
     animation: menuSideGlow 3s ease-in-out infinite alternate;
 }
 
@@ -203,13 +202,12 @@ body[data-lang="en"] .nav-menu {
     border-left: none;
     border-right: 1px solid var(--border-hover);
     transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 10px 0 50px rgba(168, 85, 247, 0.15);
+    box-shadow: 10px 0 50px rgba(255, 215, 0, 0.2);
 }
 
 .nav-menu.active { right: 0; }
 body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
 
-/* ======== NAV BRAND (قسمت بالای منو) ======== */
 .nav-brand {
     display: flex;
     align-items: center;
@@ -220,7 +218,6 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     flex-shrink: 0;
 }
 
-/* خط جداکننده نئونی زیر برند */
 .nav-brand::after {
     content: '';
     position: absolute;
@@ -239,15 +236,15 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     object-fit: cover;
     border: 2px solid var(--accent);
     box-shadow: 
-        0 0 15px rgba(168, 85, 247, 0.5),
-        0 0 30px rgba(168, 85, 247, 0.2);
+        0 0 15px rgba(255, 215, 0, 0.6),
+        0 0 30px rgba(255, 215, 0, 0.3);
     animation: brandPulse 2.5s ease-in-out infinite;
     flex-shrink: 0;
 }
 
 @keyframes brandPulse {
-    0%, 100% { box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), 0 0 30px rgba(168, 85, 247, 0.2); }
-    50% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.7), 0 0 40px rgba(168, 85, 247, 0.4); }
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.5); }
 }
 
 .nav-brand-text {
@@ -256,20 +253,19 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     color: var(--text-primary);
 }
 
-/* ======== NAV ITEMS - 📱 BIG & MOBILE FRIENDLY ======== */
 .nav-item {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 16px 14px; /* پدینگ بزرگتر برای راحتی لمس */
-    min-height: 58px; /* حداقل ارتفاع برای راحتی تاچ */
-    background: rgba(168, 85, 247, 0.03);
-    border: 1px solid rgba(168, 85, 247, 0.08);
+    padding: 16px 14px;
+    min-height: 58px;
+    background: rgba(255, 215, 0, 0.04);
+    border: 1px solid rgba(255, 215, 0, 0.1);
     border-radius: 14px;
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 600;
-    font-size: 15px; /* فونت بزرگتر و خواناتر */
+    font-size: 15px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -277,7 +273,6 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     touch-action: manipulation;
 }
 
-/* افکت درخشش هاور - نور از زیر رد میشه */
 .nav-item::before {
     content: '';
     position: absolute;
@@ -285,7 +280,7 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.25), transparent);
     transition: left 0.5s ease;
     pointer-events: none;
 }
@@ -295,7 +290,6 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     left: 100%;
 }
 
-/* باکس نئونی دور آیکون - بزرگتر برای موبایل */
 .nav-item svg {
     width: 22px;
     height: 22px;
@@ -331,20 +325,19 @@ body[data-lang="en"] .nav-item:active {
 .nav-item:hover svg,
 .nav-item:active svg {
     background: var(--accent);
-    color: #fff;
+    color: #2a1e00;
     border-color: var(--accent);
     box-shadow: 0 0 15px var(--accent);
     transform: rotate(-5deg) scale(1.05);
 }
 
-/* گزینه فعال - با نشانگر نئونی */
 .nav-item.active {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(99, 102, 241, 0.1));
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 184, 0, 0.12));
     color: var(--text-primary);
     border-color: var(--accent);
     box-shadow: 
-        inset 0 0 20px rgba(168, 85, 247, 0.1),
-        0 0 20px rgba(168, 85, 247, 0.2);
+        inset 0 0 20px rgba(255, 215, 0, 0.15),
+        0 0 20px rgba(255, 215, 0, 0.3);
 }
 
 .nav-item.active::after {
@@ -372,14 +365,12 @@ body[data-lang="en"] .nav-item.active::after {
 
 .nav-item.active svg {
     background: var(--accent-grad);
-    color: #fff;
+    color: #2a1e00;
     border-color: var(--accent);
-    box-shadow: 0 0 15px var(--accent), 0 0 25px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 15px var(--accent), 0 0 25px rgba(255, 215, 0, 0.5);
 }
 
-/* دکمه خروج - استایل خاص و همیشه پایین */
 .nav-item[href="/logout"] {
-    margin-top: auto;
     background: rgba(255, 72, 118, 0.05);
     border-color: rgba(255, 72, 118, 0.15);
     color: var(--danger);
@@ -408,7 +399,6 @@ body[data-lang="en"] .nav-item.active::after {
     box-shadow: 0 0 15px var(--danger);
 }
 
-/* ======== OVERLAY ======== */
 .overlay {
     position: fixed;
     inset: 0;
@@ -426,7 +416,6 @@ body[data-lang="en"] .nav-item.active::after {
     opacity: 1;
 }
 
-/* ======== CONTAINER ======== */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -446,10 +435,9 @@ body[data-lang="en"] .nav-item.active::after {
 .page-title svg {
     width: 28px; height: 28px;
     color: var(--accent);
-    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
 
-/* ======== STATS GRID ======== */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -480,7 +468,7 @@ body[data-lang="en"] .nav-item.active::after {
 .stat-card:hover {
     border-color: var(--border-hover);
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
 }
 
 .stat-icon-wrap {
@@ -509,7 +497,6 @@ body[data-lang="en"] .nav-item.active::after {
     font-weight: 500;
 }
 
-/* ======== SERVER STATUS ======== */
 .server-status {
     background: var(--bg-card);
     backdrop-filter: blur(20px);
@@ -561,7 +548,6 @@ body[data-lang="en"] .status-dot { margin-left: 0; margin-right: 8px; }
     align-items: center;
 }
 
-/* ======== BUTTONS ======== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -583,13 +569,14 @@ body[data-lang="en"] .status-dot { margin-left: 0; margin-right: 8px; }
 
 .btn-primary {
     background: var(--accent-grad);
-    color: #fff;
-    box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+    color: #2a1e00;
+    box-shadow: 0 4px 18px rgba(255, 215, 0, 0.45);
+    font-weight: 800;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(168, 85, 247, 0.55);
+    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.65);
 }
 
 .btn-success {
@@ -606,10 +593,10 @@ body[data-lang="en"] .status-dot { margin-left: 0; margin-right: 8px; }
 }
 
 .btn-warning {
-    background: linear-gradient(135deg, #fbbf24, #d97706);
-    color: #2a1a00;
+    background: linear-gradient(135deg, #ff9500, #cc6600);
+    color: #fff;
     font-weight: 700;
-    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
 }
 
 .btn-ghost {
@@ -621,12 +608,11 @@ body[data-lang="en"] .status-dot { margin-left: 0; margin-right: 8px; }
 .btn-ghost:hover {
     border-color: var(--accent);
     color: var(--accent);
-    box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
 }
 
 .btn-block { width: 100%; }
 
-/* ======== USER CARDS ======== */
 .user-card {
     background: var(--bg-card);
     backdrop-filter: blur(20px);
@@ -659,7 +645,7 @@ body[data-lang="en"] .user-card::before {
 .user-card:hover {
     border-color: var(--border-hover);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
 }
 
 .user-head {
@@ -795,7 +781,6 @@ body[data-lang="en"] .user-card::before {
 
 .user-actions .btn svg { width: 16px; height: 16px; }
 
-/* ======== FORMS ======== */
 .form-section {
     background: var(--bg-card);
     backdrop-filter: blur(20px);
@@ -813,7 +798,7 @@ body[data-lang="en"] .user-card::before {
     top: 0; left: 0; right: 0;
     height: 2px;
     background: var(--accent-grad);
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .form-section-title {
@@ -865,7 +850,7 @@ textarea.form-control {
 
 select.form-control {
     cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffd700' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: left 15px center;
     padding-left: 40px;
@@ -877,7 +862,6 @@ body[data-lang="en"] select.form-control {
     padding-right: 40px;
 }
 
-/* ======== LOGIN ======== */
 .login-wrapper {
     min-height: 100vh;
     display: flex;
@@ -898,7 +882,7 @@ body[data-lang="en"] select.form-control {
     padding: 35px 28px;
     box-shadow: 
         0 20px 60px rgba(0, 0, 0, 0.4),
-        0 0 50px rgba(168, 85, 247, 0.2);
+        0 0 50px rgba(255, 215, 0, 0.3);
     position: relative;
 }
 
@@ -920,7 +904,7 @@ body[data-lang="en"] select.form-control {
     border: 3px solid var(--accent);
     margin: 0 auto 18px;
     display: block;
-    box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
     animation: float 3.5s ease-in-out infinite;
 }
 
@@ -971,7 +955,6 @@ body[data-lang="en"] select.form-control {
     color: var(--danger);
 }
 
-/* ======== EMPTY STATE ======== */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -991,13 +974,11 @@ body[data-lang="en"] select.form-control {
     font-weight: 500;
 }
 
-/* ======== RESPONSIVE ======== */
 @media (min-width: 768px) {
     .stats-grid { grid-template-columns: repeat(4, 1fr); }
     .user-info { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* ======== 📱 MOBILE OPTIMIZATION FOR NAV MENU ======== */
 @media (max-width: 480px) {
     .nav-menu {
         width: 88%;
@@ -1036,7 +1017,6 @@ body[data-lang="en"] select.form-control {
     }
 }
 
-/* برای موبایل‌های خیلی کوچیک */
 @media (max-width: 360px) {
     .nav-menu {
         width: 90%;
@@ -1050,7 +1030,6 @@ body[data-lang="en"] select.form-control {
     }
 }
 
-/* ======== SCROLLBAR ======== */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
 ::-webkit-scrollbar-thumb {
@@ -1059,7 +1038,6 @@ body[data-lang="en"] select.form-control {
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-/* ======== NAV MENU ANIMATION ON OPEN ======== */
 .nav-menu.active .nav-item {
     animation: slideInItem 0.4s ease forwards;
     opacity: 0;
@@ -1070,6 +1048,9 @@ body[data-lang="en"] select.form-control {
 .nav-menu.active .nav-item:nth-child(4) { animation-delay: 0.15s; }
 .nav-menu.active .nav-item:nth-child(5) { animation-delay: 0.2s; }
 .nav-menu.active .nav-item:nth-child(6) { animation-delay: 0.25s; }
+.nav-menu.active .nav-item:nth-child(7) { animation-delay: 0.3s; }
+.nav-menu.active .nav-item:nth-child(8) { animation-delay: 0.35s; }
+.nav-menu.active .nav-item:nth-child(9) { animation-delay: 0.4s; }
 
 @keyframes slideInItem {
     from {
