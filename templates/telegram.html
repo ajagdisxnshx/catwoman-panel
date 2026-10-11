@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Telegram Bot - {{ panel_name }}{% endblock %}
+{% block content %}
+
+<h1 class="page-title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    <span data-i18n="telegram">بات تلگرام</span>
+</h1>
+
+{% if success %}
+<div class="alert" style="background: rgba(16, 217, 160, 0.1); border: 1px solid var(--success); color: var(--success); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+    ✓ {{ success }}
+</div>
+{% endif %}
+{% if error %}
+<div class="alert alert-danger">⚠ {{ error }}</div>
+{% endif %}
+
+<!-- وضعیت ربات -->
+<div class="form-section">
+    <div class="form-section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
+        وضعیت ربات
+    </div>
+    <div class="status-text" style="justify-content: center;">
+        {% if settings.enabled and settings.token %}
+            <span class="status-dot on"></span>
+            <span style="color: var(--success);">ربات فعال و در حال اجراست</span>
+        {% else %}
+            <span class="status-dot off"></span>
+            <span style="color: var(--danger);">ربات غیرفعال است</span>
+        {% endif %}
+    </div>
+</div>
+
+<!-- تنظیمات ربات -->
+<form method="POST" action="/telegram/save">
+    <div class="form-section">
+        <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/></svg>
+            تنظیمات ربات
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">توکن ربات (از @BotFather)</label>
+            <input type="text" name="token" class="form-control" value="{{ settings.token }}" placeholder="123456:ABC-DEF...">
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">آیدی عددی ادمین (از @userinfobot)</label>
+            <input type="text" name="admin_id" class="form-control" value="{{ settings.admin_id }}" placeholder="123456789">
+        </div>
+        
+        <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" name="enabled" {% if settings.enabled %}checked{% endif %} style="width: 20px; height: 20px; accent-color: var(--accent);">
+                <span>فعال‌سازی ربات</span>
+            </label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            ذخیره تنظیمات
+        </button>
+    </div>
+</form>
+
+<!-- تست اتصال -->
+<form method="POST" action="/telegram/test">
+    <div class="form-section">
+        <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            تست اتصال ربات
+        </div>
+        <input type="hidden" name="token" value="{{ settings.token }}">
+        <input type="hidden" name="admin_id" value="{{ settings.admin_id }}">
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 15px;">
+            با کلیک روی دکمه زیر، یک پیام تستی برای ادمین ارسال میشه
+        </p>
+        <button type="submit" class="btn btn-success btn-block">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            ارسال پیام تست
+        </button>
+    </div>
+</form>
+
+<!-- راهنما -->
+<div class="form-section">
+    <div class="form-section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        راهنمای ساخت ربات
+    </div>
+    <ol style="color: var(--text-secondary); line-height: 2; padding-right: 20px; font-size: 13px;">
+        <li>به <a href="https://t.me/BotFather" target="_blank" style="color: var(--accent);">@BotFather</a> برید</li>
+        <li>دستور <code style="background: var(--bg-input); padding: 2px 8px; border-radius: 5px;">/newbot</code> رو بزنید</li>
+        <li>نام و یوزرنیم ربات رو انتخاب کنید</li>
+        <li>توکن داده شده رو کپی کنید</li>
+        <li>آیدی عددی خودتون رو از <a href="https://t.me/userinfobot" target="_blank" style="color: var(--accent);">@userinfobot</a> بگیرید</li>
+        <li>هر دو رو اینجا وارد و فعال کنید</li>
+    </ol>
+</div>
+
+{% endblock %}
