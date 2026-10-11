@@ -21,6 +21,7 @@ const translations = {
         settings: "تنظیمات",
         telegram: "بات تلگرام",
         traffic: "مصرف ترافیک",
+        creator_support: "پشتیبانی سازنده",
     },
     en: {
         dashboard: "Dashboard",
@@ -43,6 +44,7 @@ const translations = {
         settings: "Settings",
         telegram: "Telegram Bot",
         traffic: "Traffic Monitor",
+        creator_support: "Creator Support",
     }
 };
 
