@@ -9,17 +9,20 @@ def generate_xray_config():
     """تولید فایل کانفیگ استاندارد Xray بر اساس کاربران فعال دیتابیس"""
     try:
         users = get_all_users()
-    except Exception:
+    except Exception as e:
+        print(f"خطا در خواندن کاربران: {e}")
         users = []
 
     # فیلتر کاربران فعال
     clients = []
     for u in users:
-        if u.get("status") == "active":
+        # تبدیل sqlite3.Row به دیکشنری واقعی پایتون جهت پشتیبانی از .get()
+        u_dict = dict(u)
+        if u_dict.get("status") == "active":
             clients.append({
-                "id": u["uuid"],
-                "flow": u.get("flow", ""),
-                "email": u.get("username", "")
+                "id": u_dict.get("uuid"),
+                "flow": u_dict.get("flow", ""),
+                "email": u_dict.get("username", "")
             })
 
     # اگر کاربر فعالی نبود یک کلاینت پیش‌فرض موقت قرار می‌گیرد تا هسته کرش نکند
@@ -99,8 +102,10 @@ def restart_xray():
 
 def generate_vless_link(user, host):
     """ساخت لینک سابسکریپشن و اتصال VLESS WebSocket"""
-    uuid = user.get("uuid")
-    username = user.get("username", "user")
+    # تبدیل کاربر به دیکشنری برای اطمینان از عدم وقوع ارور مشابه
+    u_dict = dict(user)
+    uuid = u_dict.get("uuid")
+    username = u_dict.get("username", "user")
     return (
         f"vless://{uuid}@{host}:443"
         f"?encryption=none"
