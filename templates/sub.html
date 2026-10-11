@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="sub-container">
+        <!-- HEADER -->
         <div class="sub-header">
             <img src="/static/logo.jpg" alt="Logo" class="sub-logo-img">
             <div class="sub-brand">CatWoman</div>
@@ -16,28 +17,85 @@
         </div>
 
         {% if is_active %}
+            <!-- STATUS BANNER -->
             <div class="status-banner">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 سرویس شما فعال است
             </div>
 
+            <!-- CIRCULAR USAGE RING -->
+            <div class="usage-ring-section">
+                <!-- دکوراسیون پس‌زمینه -->
+                <div class="ring-deco deco-1"></div>
+                <div class="ring-deco deco-2"></div>
+                <div class="ring-deco deco-3"></div>
+                <div class="ring-particle p1"></div>
+                <div class="ring-particle p2"></div>
+                <div class="ring-particle p3"></div>
+                <div class="ring-particle p4"></div>
+
+                <div class="ring-wrapper">
+                    <svg class="usage-ring" viewBox="0 0 220 220">
+                        <defs>
+                            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#a855f7"/>
+                                <stop offset="50%" stop-color="#8b5cf6"/>
+                                <stop offset="100%" stop-color="#6366f1"/>
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        
+                        <!-- دایره دکوراتیو بیرونی -->
+                        <circle cx="110" cy="110" r="105" fill="none" stroke="rgba(168, 85, 247, 0.08)" stroke-width="1" stroke-dasharray="2 4"/>
+                        
+                        <!-- دایره پس‌زمینه -->
+                        <circle class="ring-bg" cx="110" cy="110" r="90" fill="none" stroke="rgba(168, 85, 247, 0.1)" stroke-width="12"/>
+                        
+                        <!-- دایره پیشرفت -->
+                        {% set percent_val = usage_percent if data_limit_gb > 0 else 0 %}
+                        {% set circumference = 565.48 %}
+                        {% set offset = circumference - (circumference * percent_val / 100) %}
+                        <circle class="ring-progress" cx="110" cy="110" r="90" 
+                                fill="none" stroke="url(#ringGradient)" stroke-width="12" 
+                                stroke-linecap="round"
+                                stroke-dasharray="{{ circumference }}"
+                                stroke-dashoffset="{{ offset }}"
+                                filter="url(#glow)"
+                                transform="rotate(-90 110 110)"/>
+                        
+                        <!-- نقاط تزئینی روی دایره -->
+                        <circle cx="110" cy="20" r="4" fill="#a855f7" filter="url(#glow)"/>
+                        <circle cx="110" cy="200" r="3" fill="#6366f1" opacity="0.5"/>
+                    </svg>
+
+                    <div class="ring-content">
+                        {% if data_limit_gb > 0 %}
+                            <div class="ring-percent">{{ "%.0f"|format(usage_percent) }}<span>%</span></div>
+                            <div class="ring-label">مصرف شده</div>
+                            <div class="ring-usage">
+                                <span class="used">{{ "%.2f"|format(data_used_gb) }}</span>
+                                <span class="divider">/</span>
+                                <span class="total">{{ "%.1f"|format(data_limit_gb) }} GB</span>
+                            </div>
+                        {% else %}
+                            <div class="ring-infinite">∞</div>
+                            <div class="ring-label">نامحدود</div>
+                            <div class="ring-usage">
+                                <span class="used">{{ "%.2f"|format(data_used_gb) }} GB</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO GRID -->
             <div class="info-grid">
-                <div class="info-box">
-                    <div class="info-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                    </div>
-                    <div class="info-main">
-                        {% if data_limit_gb > 0 %}{{ "%.1f"|format(data_limit_gb) }} GB{% else %}∞{% endif %}
-                    </div>
-                    <div class="info-sub">حجم کل</div>
-                </div>
-                <div class="info-box">
-                    <div class="info-icon-wrap">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                    </div>
-                    <div class="info-main">{{ "%.2f"|format(data_used_gb) }} GB</div>
-                    <div class="info-sub">مصرف شده</div>
-                </div>
                 <div class="info-box">
                     <div class="info-icon-wrap">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -54,30 +112,16 @@
                 </div>
             </div>
 
-            {% if data_limit_gb > 0 %}
-            <div class="usage-section">
-                <div class="usage-title">
-                    <span>میزان مصرف</span>
-                    <span>{{ "%.1f"|format(usage_percent) }}%</span>
-                </div>
-                <div class="usage-bar">
-                    <div class="usage-fill" style="width: {{ usage_percent }}%"></div>
-                </div>
-            </div>
-            {% endif %}
-
+            <!-- CONFIG -->
             <div class="config-section">
-                <div class="config-title">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                    کانفیگ اختصاصی شما
-                </div>
+                <div class="config-title">کانفیگ اختصاصی شما</div>
                 <div class="config-text" id="configText">{{ config_link }}</div>
                 <button class="btn-sub" onclick="copyConfig()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                     کپی کانفیگ
                 </button>
                 <button class="btn-sub secondary" onclick="copySub()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     کپی لینک ساب
                 </button>
             </div>
@@ -96,6 +140,7 @@
             </div>
         {% endif %}
 
+        <!-- APPS -->
         <div class="apps-section">
             <div class="apps-title">اپلیکیشن‌های پیشنهادی</div>
             <div class="app-item">
@@ -120,22 +165,58 @@
             </div>
         </div>
 
-        <div class="footer">Powered by CatWoman Panel</div>
+        <!-- FOOTER -->
+        <a href="https://t.me/Catwoman_ZaHra" target="_blank" class="footer-card">
+            <div class="footer-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+            </div>
+            <div class="footer-text">
+                <div class="footer-title">ساخته شده با 💜 توسط</div>
+                <div class="footer-link">@Catwoman_ZaHra</div>
+            </div>
+            <div class="footer-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </div>
+        </a>
     </div>
 
     <script>
         function copyConfig() {
             const text = document.getElementById('configText').innerText;
             navigator.clipboard.writeText(text).then(() => {
-                alert('کانفیگ کپی شد');
+                showToast('کانفیگ کپی شد');
             });
         }
         function copySub() {
             const subLink = window.location.href + '/raw';
             navigator.clipboard.writeText(subLink).then(() => {
-                alert('لینک ساب کپی شد');
+                showToast('لینک ساب کپی شد');
             });
         }
+        function showToast(msg) {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.textContent = '✓ ' + msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.classList.add('show'), 10);
+            setTimeout(() => {
+                t.classList.remove('show');
+                setTimeout(() => t.remove(), 300);
+            }, 2000);
+        }
+
+        // انیمیشن دایره هنگام لود
+        window.addEventListener('load', () => {
+            const ring = document.querySelector('.ring-progress');
+            if (ring) {
+                const originalOffset = ring.getAttribute('stroke-dashoffset');
+                ring.style.strokeDashoffset = '565.48';
+                setTimeout(() => {
+                    ring.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                    ring.style.strokeDashoffset = originalOffset;
+                }, 200);
+            }
+        });
     </script>
 </body>
 </html>
