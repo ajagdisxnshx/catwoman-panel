@@ -14,15 +14,19 @@ from database import (init_db, get_all_users, get_user_by_id, get_user_by_sub_to
                       create_user, update_user, delete_user, reset_traffic,
                       toggle_user_status, get_stats, check_users_limits)
 from xray_manager import (generate_xray_config, restart_xray, is_xray_running,
-                          generate_vless_link)
+                          generate_vless_link, collect_traffic_stats)
 
 async def periodic_check():
     while True:
         try:
+            # ابتدا دریافت مصرف واقعی کاربر از اکس‌ری و ثبت آن در دیتابیس
+            collect_traffic_stats()
+            # سپس اعمال محدودیت ترافیک و انقضا کلاینت‌ها
             check_users_limits()
+            # تولید کانفیگ جدید بر اساس تغییرات
             generate_xray_config()
         except Exception as e:
-            print(f"خطا در بررسی: {e}")
+            print(f"خطا در بررسی چرخه‌ای: {e}")
         await asyncio.sleep(30)
 
 @asynccontextmanager
@@ -128,14 +132,13 @@ async def add_user_action(
     protocol: str = Form("vless"),
     flow: str = Form(""),
     ip_limit: int = Form(0),
-    note: str = Form(""),
-    telegram_id: str = Form("")
+    note: str = Form("")
 ):
     if not is_logged_in(request):
         return RedirectResponse("/login")
     try:
         create_user(username, description, data_limit, expiry_days,
-                    protocol, flow, ip_limit, note, telegram_id, "")
+                    protocol, flow, ip_limit, note, "", "")
         generate_xray_config()
         restart_xray()
     except Exception as e:
@@ -170,13 +173,12 @@ async def edit_user_action(
     flow: str = Form(""),
     ip_limit: int = Form(0),
     note: str = Form(""),
-    telegram_id: str = Form(""),
     status: str = Form("active")
 ):
     if not is_logged_in(request):
         return RedirectResponse("/login")
     update_user(user_id, username, description, data_limit, expiry_days,
-                protocol, flow, ip_limit, note, telegram_id, "", status)
+                protocol, flow, ip_limit, note, "", "", status)
     generate_xray_config()
     restart_xray()
     return RedirectResponse("/users", status_code=303)
