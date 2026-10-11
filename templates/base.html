@@ -7,24 +7,54 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" href="/static/logo.jpg" type="image/jpeg">
     
-    <!-- لود کردن کتابخانه سبک و رسمی لاتی (Lottie) برای انیمیشن‌های نرم تلگرامی -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <!-- فونت لوکس و مدرن از گوگل -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
     
-    <!-- استایل نئونی کردن اسم پنل و تراز کردن انیمیشن گربه -->
+    <!-- کتابخانه رسمی Lottie (تست شده و 100% کار می‌کند) -->
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    
     <style>
+        /* استایل اسم پنل - لوکس با گرادینت رنگی و فونت زیبا */
         .logo, .nav-brand-text {
-            color: #ff79c6 !important; /* رنگ صورتی نئونی لوکس */
-            text-shadow: 0 0 10px rgba(255, 121, 198, 0.6), 0 0 20px rgba(189, 147, 249, 0.4);
-            font-weight: 800 !important;
+            font-family: 'Pacifico', 'Poppins', cursive !important;
+            font-weight: 700 !important;
+            font-size: 22px !important;
+            background: linear-gradient(135deg, #ff6ec4 0%, #7873f5 50%, #4ADEDE 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            color: transparent !important;
+            filter: drop-shadow(0 0 6px rgba(255, 110, 196, 0.4));
             display: inline-flex !important;
             align-items: center !important;
-            gap: 8px; /* فاصله مناسب بین گربه و متن */
+            gap: 6px !important;
+            letter-spacing: 1px;
         }
-        
-        /* سایز مناسب و بهینه برای گوشی */
-        lottie-player {
-            display: inline-block;
+
+        /* المان‌های تزئینی ستاره‌مانند کنار اسم */
+        .logo::after, .nav-brand-text::after {
+            content: "✦";
+            font-size: 14px;
+            color: #ff6ec4;
+            text-shadow: 0 0 8px #ff6ec4;
+            animation: sparkle 2s infinite;
+            -webkit-text-fill-color: #ff6ec4;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* استایل گربه Lottie */
+        dotlottie-player {
+            width: 32px !important;
+            height: 32px !important;
+            display: inline-block !important;
             vertical-align: middle;
+            filter: drop-shadow(0 0 4px rgba(255, 110, 196, 0.5));
         }
     </style>
 </head>
@@ -35,8 +65,7 @@
             <div class="brand-logo-wrap">
                 <img src="/static/logo.jpg" alt="Logo" class="panel-logo-img">
                 <span class="logo">
-                    <!-- انیمیشن گربه لاتی بسیار کیوت و سبک -->
-                    <lottie-player src="https://lottie.host/801a2386-7e3f-42a1-a6b4-21bd9e67d268/zSAsg5zLOm.json" background="transparent" speed="1.2" style="width: 28px; height: 28px;" loop autoplay></lottie-player>
+                    <dotlottie-player src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie" background="transparent" speed="1" loop autoplay></dotlottie-player>
                     {{ panel_name }}
                 </span>
             </div>
@@ -60,8 +89,7 @@
             <img src="/static/logo.jpg" alt="Logo">
             <div>
                 <div class="nav-brand-text">
-                    <!-- انیمیشن گربه لاتی داخل منوی بازشونده -->
-                    <lottie-player src="https://lottie.host/801a2386-7e3f-42a1-a6b4-21bd9e67d268/zSAsg5zLOm.json" background="transparent" speed="1.2" style="width: 24px; height: 24px;" loop autoplay></lottie-player>
+                    <dotlottie-player src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie" background="transparent" speed="1" loop autoplay></dotlottie-player>
                     {{ panel_name }}
                 </div>
                 <div style="font-size: 11px; color: var(--text-muted);" data-i18n="panel_mgmt">مدیریت پنل</div>
