@@ -146,13 +146,15 @@ body[data-lang="en"] {
 
 .icon-btn svg { width: 20px; height: 20px; }
 
-/* ======== NAV MENU (Sidebar) - ✨ NEW DESIGN ======== */
+/* ======== NAV MENU (Sidebar) - 📱 OPTIMIZED FOR MOBILE ======== */
 .nav-menu {
     position: fixed;
     top: 0;
-    right: -340px;
-    width: 300px;
+    right: -100%;
+    width: 85%;
+    max-width: 340px;
     height: 100vh;
+    height: 100dvh; /* برای موبایل‌های جدید - ارتفاع واقعی */
     background: 
         linear-gradient(165deg, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
         linear-gradient(345deg, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
@@ -162,12 +164,14 @@ body[data-lang="en"] {
     border-left: 1px solid var(--border-hover);
     z-index: 200;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 20px 15px;
+    padding: 18px 14px;
+    padding-bottom: 30px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
     box-shadow: -10px 0 50px rgba(168, 85, 247, 0.15);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* اسکرول نرم روی iOS */
 }
 
 /* نوار نئونی عمودی ابتدای منو */
@@ -195,7 +199,7 @@ body[data-lang="en"] .nav-menu::before {
 
 body[data-lang="en"] .nav-menu {
     right: auto;
-    left: -340px;
+    left: -100%;
     border-left: none;
     border-right: 1px solid var(--border-hover);
     transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -209,10 +213,11 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
 .nav-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 15px 12px 20px;
-    margin-bottom: 15px;
+    gap: 14px;
+    padding: 12px 10px 18px;
+    margin-bottom: 12px;
     position: relative;
+    flex-shrink: 0;
 }
 
 /* خط جداکننده نئونی زیر برند */
@@ -228,8 +233,8 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
 }
 
 .nav-brand img {
-    width: 48px; 
-    height: 48px;
+    width: 50px; 
+    height: 50px;
     border-radius: 14px;
     object-fit: cover;
     border: 2px solid var(--accent);
@@ -237,6 +242,7 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
         0 0 15px rgba(168, 85, 247, 0.5),
         0 0 30px rgba(168, 85, 247, 0.2);
     animation: brandPulse 2.5s ease-in-out infinite;
+    flex-shrink: 0;
 }
 
 @keyframes brandPulse {
@@ -250,22 +256,25 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     color: var(--text-primary);
 }
 
-/* ======== NAV ITEMS ======== */
+/* ======== NAV ITEMS - 📱 BIG & MOBILE FRIENDLY ======== */
 .nav-item {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 13px 14px;
+    padding: 16px 14px; /* پدینگ بزرگتر برای راحتی لمس */
+    min-height: 58px; /* حداقل ارتفاع برای راحتی تاچ */
     background: rgba(168, 85, 247, 0.03);
     border: 1px solid rgba(168, 85, 247, 0.08);
     border-radius: 14px;
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 15px; /* فونت بزرگتر و خواناتر */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
+    touch-action: manipulation;
 }
 
 /* افکت درخشش هاور - نور از زیر رد میشه */
@@ -278,22 +287,24 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.2), transparent);
     transition: left 0.5s ease;
+    pointer-events: none;
 }
 
-.nav-item:hover::before {
+.nav-item:hover::before,
+.nav-item:active::before {
     left: 100%;
 }
 
-/* باکس نئونی دور آیکون */
+/* باکس نئونی دور آیکون - بزرگتر برای موبایل */
 .nav-item svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
-    padding: 6px;
+    padding: 8px;
     box-sizing: content-box;
     background: var(--bg-input);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
+    border-radius: 11px;
     transition: all 0.3s;
 }
 
@@ -301,20 +312,24 @@ body[data-lang="en"] .nav-menu.active { left: 0; right: auto; }
     position: relative;
     z-index: 1;
     transition: all 0.3s;
+    flex: 1;
 }
 
-.nav-item:hover {
+.nav-item:hover,
+.nav-item:active {
     background: var(--accent-soft);
     color: var(--accent);
     border-color: var(--border-hover);
     transform: translateX(-4px);
 }
 
-body[data-lang="en"] .nav-item:hover {
+body[data-lang="en"] .nav-item:hover,
+body[data-lang="en"] .nav-item:active {
     transform: translateX(4px);
 }
 
-.nav-item:hover svg {
+.nav-item:hover svg,
+.nav-item:active svg {
     background: var(--accent);
     color: #fff;
     border-color: var(--accent);
@@ -362,7 +377,7 @@ body[data-lang="en"] .nav-item.active::after {
     box-shadow: 0 0 15px var(--accent), 0 0 25px rgba(168, 85, 247, 0.4);
 }
 
-/* دکمه خروج - استایل خاص */
+/* دکمه خروج - استایل خاص و همیشه پایین */
 .nav-item[href="/logout"] {
     margin-top: auto;
     background: rgba(255, 72, 118, 0.05);
@@ -377,14 +392,16 @@ body[data-lang="en"] .nav-item.active::after {
     color: var(--danger);
 }
 
-.nav-item[href="/logout"]:hover {
+.nav-item[href="/logout"]:hover,
+.nav-item[href="/logout"]:active {
     background: rgba(255, 72, 118, 0.12);
     border-color: var(--danger);
     color: var(--danger);
     box-shadow: 0 0 20px rgba(255, 72, 118, 0.3);
 }
 
-.nav-item[href="/logout"]:hover svg {
+.nav-item[href="/logout"]:hover svg,
+.nav-item[href="/logout"]:active svg {
     background: var(--danger);
     color: #fff;
     border-color: var(--danger);
@@ -978,6 +995,59 @@ body[data-lang="en"] select.form-control {
 @media (min-width: 768px) {
     .stats-grid { grid-template-columns: repeat(4, 1fr); }
     .user-info { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ======== 📱 MOBILE OPTIMIZATION FOR NAV MENU ======== */
+@media (max-width: 480px) {
+    .nav-menu {
+        width: 88%;
+        max-width: 320px;
+        padding: 15px 12px;
+        padding-bottom: 25px;
+        gap: 8px;
+    }
+    
+    .nav-brand {
+        padding: 10px 8px 16px;
+        margin-bottom: 10px;
+        gap: 12px;
+    }
+    
+    .nav-brand img {
+        width: 46px;
+        height: 46px;
+    }
+    
+    .nav-brand-text {
+        font-size: 16px;
+    }
+    
+    .nav-item {
+        padding: 14px 12px;
+        min-height: 54px;
+        font-size: 14.5px;
+        gap: 12px;
+    }
+    
+    .nav-item svg {
+        width: 20px;
+        height: 20px;
+        padding: 7px;
+    }
+}
+
+/* برای موبایل‌های خیلی کوچیک */
+@media (max-width: 360px) {
+    .nav-menu {
+        width: 90%;
+        padding: 12px 10px;
+    }
+    
+    .nav-item {
+        padding: 13px 11px;
+        min-height: 52px;
+        font-size: 14px;
+    }
 }
 
 /* ======== SCROLLBAR ======== */
