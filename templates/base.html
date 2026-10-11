@@ -7,54 +7,76 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" href="/static/logo.jpg" type="image/jpeg">
     
-    <!-- فونت لوکس و مدرن از گوگل -->
+    <!-- فونت خفن و سایبری Russo One مخصوص تم‌های RGB -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Poppins:wght@900&display=swap" rel="stylesheet">
     
-    <!-- کتابخانه رسمی Lottie (تست شده و 100% کار می‌کند) -->
+    <!-- کتابخانه لاتی برای گربه کیوت -->
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
     
     <style>
-        /* استایل اسم پنل - لوکس با گرادینت رنگی و فونت زیبا */
+        /* استایل اسم پنل با افکت RGB متحرک و فونت گیمینگ */
         .logo, .nav-brand-text {
-            font-family: 'Pacifico', 'Poppins', cursive !important;
-            font-weight: 700 !important;
-            font-size: 22px !important;
-            background: linear-gradient(135deg, #ff6ec4 0%, #7873f5 50%, #4ADEDE 100%) !important;
+            font-family: 'Russo One', 'Poppins', sans-serif !important;
+            font-weight: 900 !important;
+            font-size: 20px !important;
+            letter-spacing: 1.5px !important;
+            
+            /* ایجاد طیف رنگی RGB متحرک */
+            background: linear-gradient(
+                to right, 
+                #ff007f 0%, 
+                #7f00ff 25%, 
+                #00f0ff 50%, 
+                #00ff7f 75%, 
+                #ff007f 100%
+            ) !important;
+            background-size: 200% auto !important;
             -webkit-background-clip: text !important;
             background-clip: text !important;
             -webkit-text-fill-color: transparent !important;
             color: transparent !important;
-            filter: drop-shadow(0 0 6px rgba(255, 110, 196, 0.4));
+            
+            /* سایه نئونی ملایم */
+            filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.4)) drop-shadow(0 0 15px rgba(0, 240, 255, 0.3));
+            
             display: inline-flex !important;
             align-items: center !important;
             gap: 6px !important;
-            letter-spacing: 1px;
+            
+            /* انیمیشن حرکت روان نور RGB */
+            animation: rgbFlow 4s linear infinite !important;
         }
 
-        /* المان‌های تزئینی ستاره‌مانند کنار اسم */
+        /* انیمیشن حرکت طیف رنگی */
+        @keyframes rgbFlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* ستاره درخشان کناری */
         .logo::after, .nav-brand-text::after {
             content: "✦";
             font-size: 14px;
-            color: #ff6ec4;
-            text-shadow: 0 0 8px #ff6ec4;
+            color: #00f0ff;
+            text-shadow: 0 0 8px #00f0ff;
             animation: sparkle 2s infinite;
-            -webkit-text-fill-color: #ff6ec4;
+            -webkit-text-fill-color: #00f0ff !important;
         }
 
         @keyframes sparkle {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+            50% { opacity: 0.5; transform: scale(1.3); }
         }
 
-        /* استایل گربه Lottie */
+        /* استایل گربه */
         dotlottie-player {
             width: 32px !important;
             height: 32px !important;
             display: inline-block !important;
             vertical-align: middle;
-            filter: drop-shadow(0 0 4px rgba(255, 110, 196, 0.5));
+            filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.5));
         }
     </style>
 </head>
@@ -65,7 +87,7 @@
             <div class="brand-logo-wrap">
                 <img src="/static/logo.jpg" alt="Logo" class="panel-logo-img">
                 <span class="logo">
-                    <dotlottie-player src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie" background="transparent" speed="1" loop autoplay></dotlottie-player>
+                    <dotlottie-player src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie" background="transparent" speed="1.2" loop autoplay></dotlottie-player>
                     {{ panel_name }}
                 </span>
             </div>
@@ -89,7 +111,7 @@
             <img src="/static/logo.jpg" alt="Logo">
             <div>
                 <div class="nav-brand-text">
-                    <dotlottie-player src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie" background="transparent" speed="1" loop autoplay></dotlottie-player>
+                    <dotlottie-player src="https://lottie.host/4db68bbd-31f6-4cd8-84eb-189de081159a/IGmMCqhzpt.lottie" background="transparent" speed="1.2" style="width: 26px; height: 26px;" loop autoplay></dotlottie-player>
                     {{ panel_name }}
                 </div>
                 <div style="font-size: 11px; color: var(--text-muted);" data-i18n="panel_mgmt">مدیریت پنل</div>
