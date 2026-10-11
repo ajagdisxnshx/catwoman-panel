@@ -1,117 +1,98 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ساخت کاربر - {{ panel_name }}</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <header class="header">
-        <div class="header-content">
-            <div class="brand-logo-wrap">
-                <img src="/static/logo.jpg" alt="CatWoman" class="panel-logo-img">
-                <span class="logo">CatWoman</span>
-            </div>
-            <button class="menu-btn" onclick="toggleMenu()">☰</button>
+{% extends "base.html" %}
+{% block title %}Add User - {{ panel_name }}{% endblock %}
+{% block content %}
+
+<h1 class="page-title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+    <span data-i18n="add_user">ساخت کاربر جدید</span>
+</h1>
+
+<form method="POST" action="/users/add">
+    <div class="form-section">
+        <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            اطلاعات اصلی
         </div>
-    </header>
-    
-    <div class="overlay" onclick="toggleMenu()"></div>
-    <nav class="nav-menu">
-        <a href="/dashboard" class="nav-item">📊 داشبورد</a>
-        <a href="/users" class="nav-item">👥 کاربران</a>
-        <a href="/users/add" class="nav-item active">➕ ساخت کاربر</a>
-        <a href="/logout" class="nav-item">🚪 خروج</a>
-    </nav>
-    
-    <div class="container">
-        <h1 class="page-title">➕ ساخت کاربر جدید</h1>
-        
-        <form method="POST" action="/users/add">
-            <div class="form-section">
-                <div class="form-section-title">📋 اطلاعات اصلی</div>
-                
-                <div class="form-group">
-                    <label class="form-label">👤 نام کاربری *</label>
-                    <input type="text" name="username" class="form-control" required placeholder="catuser1">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">😺 ایموجی</label>
-                    <input type="text" name="emoji" class="form-control" value="😺" placeholder="😺">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">📝 توضیحات</label>
-                    <textarea name="description" class="form-control" placeholder="توضیحات کوتاه..."></textarea>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <div class="form-section-title">⚙️ محدودیت‌ها</div>
-                
-                <div class="form-group">
-                    <label class="form-label">💾 حجم (گیگابایت) - 0 = نامحدود</label>
-                    <input type="number" name="data_limit" class="form-control" value="10" min="0" step="0.1">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">⏰ مدت زمان (روز) - 0 = نامحدود</label>
-                    <input type="number" name="expiry_days" class="form-control" value="30" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">🌐 محدودیت IP - 0 = نامحدود</label>
-                    <input type="number" name="ip_limit" class="form-control" value="0" min="0">
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <div class="form-section-title">🔗 تنظیمات پروتکل</div>
-                
-                <div class="form-group">
-                    <label class="form-label">📡 پروتکل</label>
-                    <select name="protocol" class="form-control">
-                        <option value="vless">VLESS (پیشنهادی)</option>
-                        <option value="vmess">VMess</option>
-                        <option value="trojan">Trojan</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">🌊 Flow</label>
-                    <select name="flow" class="form-control">
-                        <option value="">هیچکدام</option>
-                        <option value="xtls-rprx-vision">XTLS Vision</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <div class="form-section-title">📎 اطلاعات تکمیلی</div>
-                
-                <div class="form-group">
-                    <label class="form-label">💬 آیدی تلگرام</label>
-                    <input type="text" name="telegram_id" class="form-control" placeholder="@username">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">📒 یادداشت ادمین</label>
-                    <textarea name="note" class="form-control" placeholder="یادداشت فقط برای ادمین..."></textarea>
-                </div>
-            </div>
-            
-            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">💗 ایجاد کاربر 💗</button>
-            <a href="/users" class="btn btn-ghost btn-block" style="margin-top: 10px;">بازگشت</a>
-        </form>
+
+        <div class="form-group">
+            <label class="form-label">نام کاربری *</label>
+            <input type="text" name="username" class="form-control" required placeholder="user1">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">توضیحات</label>
+            <textarea name="description" class="form-control" placeholder="توضیحات کوتاه..."></textarea>
+        </div>
     </div>
-    
-    <script>
-        function toggleMenu() {
-            document.querySelector('.nav-menu').classList.toggle('active');
-            document.querySelector('.overlay').classList.toggle('active');
-        }
-    </script>
-</body>
-</html>
+
+    <div class="form-section">
+        <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            محدودیت‌ها
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">حجم (گیگابایت) - 0 = نامحدود</label>
+            <input type="number" name="data_limit" class="form-control" value="10" min="0" step="0.1">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">مدت زمان (روز) - 0 = نامحدود</label>
+            <input type="number" name="expiry_days" class="form-control" value="30" min="0">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">محدودیت IP - 0 = نامحدود</label>
+            <input type="number" name="ip_limit" class="form-control" value="0" min="0">
+        </div>
+    </div>
+
+    <div class="form-section">
+        <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            تنظیمات پروتکل
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">پروتکل</label>
+            <select name="protocol" class="form-control">
+                <option value="vless">VLESS (پیشنهادی)</option>
+                <option value="vmess">VMess</option>
+                <option value="trojan">Trojan</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Flow</label>
+            <select name="flow" class="form-control">
+                <option value="">هیچکدام</option>
+                <option value="xtls-rprx-vision">XTLS Vision</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            اطلاعات تکمیلی
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">آیدی تلگرام</label>
+            <input type="text" name="telegram_id" class="form-control" placeholder="@username">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">یادداشت ادمین</label>
+            <textarea name="note" class="form-control" placeholder="یادداشت فقط برای ادمین..."></textarea>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        ایجاد کاربر
+    </button>
+    <a href="/users" class="btn btn-ghost btn-block" style="margin-top: 10px;">بازگشت</a>
+</form>
+
+{% endblock %}
