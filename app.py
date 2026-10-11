@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form, HTTPException, Depends
+from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -16,7 +16,6 @@ from database import (init_db, get_all_users, get_user_by_id, get_user_by_sub_to
 from xray_manager import (generate_xray_config, restart_xray, is_xray_running,
                           generate_vless_link)
 
-# بررسی خودکار محدودیت کاربران هر ۳۰ ثانیه
 async def periodic_check():
     while True:
         try:
@@ -40,13 +39,8 @@ app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# ============ Helper Functions ============
 def is_logged_in(request: Request):
     return request.session.get("logged_in", False)
-
-def require_auth(request: Request):
-    if not is_logged_in(request):
-        raise HTTPException(status_code=307, headers={"Location": "/login"})
 
 def format_bytes(bytes_val):
     if bytes_val == 0:
@@ -63,10 +57,9 @@ def days_remaining(expiry):
         return "∞"
     diff = expiry - int(time.time())
     if diff <= 0:
-        return "منقضی"
-    return f"{int(diff / 86400)} روز"
+        return "0"
+    return f"{int(diff / 86400)}"
 
-# ============ Routes ============
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     if not is_logged_in(request):
@@ -86,7 +79,7 @@ async def login_action(request: Request, username: str = Form(...), password: st
         return RedirectResponse("/dashboard", status_code=303)
     return templates.TemplateResponse("login.html", {
         "request": request, "panel_name": PANEL_NAME,
-        "error": "نام کاربری یا رمز عبور اشتباه است 🙀"
+        "error": "نام کاربری یا رمز عبور اشتباه است"
     })
 
 @app.get("/logout")
@@ -101,11 +94,9 @@ async def dashboard(request: Request):
     stats = get_stats()
     xray_status = is_xray_running()
     return templates.TemplateResponse("dashboard.html", {
-        "request": request,
-        "panel_name": PANEL_NAME,
-        "stats": stats,
-        "xray_status": xray_status,
-        "format_bytes": format_bytes
+        "request": request, "panel_name": PANEL_NAME,
+        "stats": stats, "xray_status": xray_status,
+        "format_bytes": format_bytes, "active_page": "dashboard"
     })
 
 @app.get("/users", response_class=HTMLResponse)
@@ -114,11 +105,9 @@ async def users_page(request: Request):
         return RedirectResponse("/login")
     users = get_all_users()
     return templates.TemplateResponse("users.html", {
-        "request": request,
-        "panel_name": PANEL_NAME,
-        "users": users,
-        "format_bytes": format_bytes,
-        "days_remaining": days_remaining
+        "request": request, "panel_name": PANEL_NAME, "users": users,
+        "format_bytes": format_bytes, "days_remaining": days_remaining,
+        "active_page": "users"
     })
 
 @app.get("/users/add", response_class=HTMLResponse)
@@ -126,7 +115,7 @@ async def add_user_page(request: Request):
     if not is_logged_in(request):
         return RedirectResponse("/login")
     return templates.TemplateResponse("add_user.html", {
-        "request": request, "panel_name": PANEL_NAME
+        "request": request, "panel_name": PANEL_NAME, "active_page": "add"
     })
 
 @app.post("/users/add")
@@ -140,14 +129,13 @@ async def add_user_action(
     flow: str = Form(""),
     ip_limit: int = Form(0),
     note: str = Form(""),
-    telegram_id: str = Form(""),
-    emoji: str = Form("😺")
+    telegram_id: str = Form("")
 ):
     if not is_logged_in(request):
         return RedirectResponse("/login")
     try:
         create_user(username, description, data_limit, expiry_days,
-                    protocol, flow, ip_limit, note, telegram_id, emoji)
+                    protocol, flow, ip_limit, note, telegram_id, "")
         generate_xray_config()
         restart_xray()
     except Exception as e:
@@ -168,7 +156,7 @@ async def edit_user_page(request: Request, user_id: str):
     return templates.TemplateResponse("edit_user.html", {
         "request": request, "panel_name": PANEL_NAME,
         "user": user, "remaining_days": remaining_days,
-        "data_limit_gb": data_limit_gb
+        "data_limit_gb": data_limit_gb, "active_page": "users"
     })
 
 @app.post("/users/edit/{user_id}")
@@ -183,13 +171,12 @@ async def edit_user_action(
     ip_limit: int = Form(0),
     note: str = Form(""),
     telegram_id: str = Form(""),
-    emoji: str = Form("😺"),
     status: str = Form("active")
 ):
     if not is_logged_in(request):
         return RedirectResponse("/login")
     update_user(user_id, username, description, data_limit, expiry_days,
-                protocol, flow, ip_limit, note, telegram_id, emoji, status)
+                protocol, flow, ip_limit, note, telegram_id, "", status)
     generate_xray_config()
     restart_xray()
     return RedirectResponse("/users", status_code=303)
@@ -219,7 +206,6 @@ async def toggle_user(request: Request, user_id: str):
     restart_xray()
     return RedirectResponse("/users", status_code=303)
 
-# ============ Subscription Routes ============
 @app.get("/sub/{token}")
 async def subscription(request: Request, token: str):
     user = get_user_by_sub_token(token)
@@ -228,7 +214,6 @@ async def subscription(request: Request, token: str):
     
     host = request.url.hostname
     
-    # اگر کاربر غیرفعال است، صفحه خاتمه سرویس نمایش داده شود
     if user["status"] in ["disabled", "data_exhausted", "expired"]:
         reason = {
             "disabled": "سرویس شما به صورت موقت توسط ادمین غیرفعال شده است",
@@ -237,14 +222,9 @@ async def subscription(request: Request, token: str):
         }.get(user["status"], "سرویس غیرفعال")
         
         return templates.TemplateResponse("sub.html", {
-            "request": request,
-            "user": user,
-            "config_link": "",
-            "host": host,
-            "format_bytes": format_bytes,
-            "days_remaining": days_remaining,
-            "is_active": False,
-            "reason": reason,
+            "request": request, "user": user, "config_link": "",
+            "host": host, "format_bytes": format_bytes,
+            "days_remaining": days_remaining, "is_active": False, "reason": reason,
             "data_used_gb": user["data_used"] / 1073741824,
             "data_limit_gb": user["data_limit"] / 1073741824 if user["data_limit"] else 0,
             "usage_percent": min(100, (user["data_used"] / user["data_limit"] * 100) if user["data_limit"] else 0)
@@ -252,20 +232,14 @@ async def subscription(request: Request, token: str):
     
     config_link = generate_vless_link(user, host)
     return templates.TemplateResponse("sub.html", {
-        "request": request,
-        "user": user,
-        "config_link": config_link,
-        "host": host,
-        "format_bytes": format_bytes,
-        "days_remaining": days_remaining,
-        "is_active": True,
-        "reason": "",
+        "request": request, "user": user, "config_link": config_link,
+        "host": host, "format_bytes": format_bytes,
+        "days_remaining": days_remaining, "is_active": True, "reason": "",
         "data_used_gb": user["data_used"] / 1073741824,
         "data_limit_gb": user["data_limit"] / 1073741824 if user["data_limit"] else 0,
         "usage_percent": min(100, (user["data_used"] / user["data_limit"] * 100) if user["data_limit"] else 0)
     })
 
-# لینک ساب خام برای کلاینت‌ها (base64)
 @app.get("/sub/{token}/raw")
 async def subscription_raw(request: Request, token: str):
     user = get_user_by_sub_token(token)
