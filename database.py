@@ -1,14 +1,19 @@
 import sqlite3
 import uuid
 import time
-import json
 import os
 
 DB_PATH = "/app/data/catwoman.db"
 
+def get_db_connection():
+    """ایجاد اتصال به دیتابیس با قابلیت انتظار برای جلوگیری از لاک شدن دیتابیس"""
+    conn = sqlite3.connect(DB_PATH, timeout=30)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 def init_db():
     os.makedirs("/app/data", exist_ok=True)
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id TEXT PRIMARY KEY,
@@ -32,18 +37,15 @@ def init_db():
         conn.commit()
 
 def get_all_users():
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.row_factory = sqlite3.Row
+    with get_db_connection() as conn:
         return conn.execute("SELECT * FROM users ORDER BY created_at DESC").fetchall()
 
 def get_user_by_id(user_id):
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.row_factory = sqlite3.Row
+    with get_db_connection() as conn:
         return conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
 
 def get_user_by_sub_token(token):
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.row_factory = sqlite3.Row
+    with get_db_connection() as conn:
         return conn.execute("SELECT * FROM users WHERE sub_token = ?", (token,)).fetchone()
 
 def create_user(username, description, data_limit, expiry_days, protocol, 
@@ -55,7 +57,7 @@ def create_user(username, description, data_limit, expiry_days, protocol,
     expiry_date = int(time.time()) + (expiry_days * 86400) if expiry_days > 0 else 0
     data_limit_bytes = data_limit * 1073741824  # تبدیل گیگ به بایت
     
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         conn.execute("""
             INSERT INTO users (id, username, description, data_limit, data_used,
                 expiry_date, status, uuid, created_at, sub_token, protocol,
@@ -72,7 +74,7 @@ def update_user(user_id, username, description, data_limit, expiry_days,
     expiry_date = int(time.time()) + (expiry_days * 86400) if expiry_days > 0 else 0
     data_limit_bytes = data_limit * 1073741824
     
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         conn.execute("""
             UPDATE users SET username=?, description=?, data_limit=?,
                 expiry_date=?, protocol=?, flow=?, ip_limit=?, note=?,
@@ -83,31 +85,31 @@ def update_user(user_id, username, description, data_limit, expiry_days,
         conn.commit()
 
 def delete_user(user_id):
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
         conn.commit()
 
 def reset_traffic(user_id):
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         conn.execute("UPDATE users SET data_used = 0 WHERE id = ?", (user_id,))
         conn.commit()
 
 def toggle_user_status(user_id):
     user = get_user_by_id(user_id)
     new_status = "disabled" if user["status"] == "active" else "active"
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         conn.execute("UPDATE users SET status = ? WHERE id = ?", (new_status, user_id))
         conn.commit()
     return new_status
 
 def update_traffic(user_id, bytes_used):
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         conn.execute("UPDATE users SET data_used = data_used + ? WHERE id = ?", 
                      (bytes_used, user_id))
         conn.commit()
 
 def get_stats():
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         total = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
         active = conn.execute("SELECT COUNT(*) FROM users WHERE status='active'").fetchone()[0]
         disabled = conn.execute("SELECT COUNT(*) FROM users WHERE status='disabled'").fetchone()[0]
@@ -122,7 +124,7 @@ def get_stats():
 def check_users_limits():
     """بررسی اتمام حجم و انقضا و غیرفعال کردن خودکار"""
     now = int(time.time())
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db_connection() as conn:
         # غیرفعال کردن کاربرانی که حجمشان تمام شده
         conn.execute("""
             UPDATE users SET status = 'data_exhausted' 
