@@ -7,52 +7,32 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" href="/static/logo.jpg" type="image/jpeg">
     
-    <!-- فونت خفن و سایبری Russo One مخصوص تم‌های RGB -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Poppins:wght@900&display=swap" rel="stylesheet">
     
     <style>
-        /* استایل اسم پنل با افکت RGB متحرک و فونت گیمینگ */
         .logo, .nav-brand-text {
             font-family: 'Russo One', 'Poppins', sans-serif !important;
             font-weight: 900 !important;
             font-size: 20px !important;
             letter-spacing: 1.5px !important;
-            
-            /* ایجاد طیف رنگی RGB متحرک */
-            background: linear-gradient(
-                to right, 
-                #ff007f 0%, 
-                #7f00ff 25%, 
-                #00f0ff 50%, 
-                #00ff7f 75%, 
-                #ff007f 100%
-            ) !important;
+            background: linear-gradient(to right, #ff007f 0%, #7f00ff 25%, #00f0ff 50%, #00ff7f 75%, #ff007f 100%) !important;
             background-size: 200% auto !important;
             -webkit-background-clip: text !important;
             background-clip: text !important;
             -webkit-text-fill-color: transparent !important;
             color: transparent !important;
-            
-            /* سایه نئونی ملایم */
             filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.4)) drop-shadow(0 0 15px rgba(0, 240, 255, 0.3));
-            
             display: inline-flex !important;
             align-items: center !important;
             gap: 6px !important;
-            
-            /* انیمیشن حرکت روان نور RGB */
             animation: rgbFlow 4s linear infinite !important;
         }
-
-        /* انیمیشن حرکت طیف رنگی */
         @keyframes rgbFlow {
             0% { background-position: 0% center; }
             100% { background-position: 200% center; }
         }
-
-        /* ستاره درخشان تکونی کناری */
         .logo::after, .nav-brand-text::after {
             content: "✦";
             font-size: 14px;
@@ -61,7 +41,6 @@
             animation: sparkle 2s infinite;
             -webkit-text-fill-color: #00f0ff !important;
         }
-
         @keyframes sparkle {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(1.3); }
@@ -74,9 +53,7 @@
         <div class="header-content">
             <div class="brand-logo-wrap">
                 <img src="/static/logo.jpg" alt="Logo" class="panel-logo-img">
-                <span class="logo">
-                    {{ panel_name }}
-                </span>
+                <span class="logo">{{ panel_name }}</span>
             </div>
             <div class="header-actions">
                 <button class="icon-btn" onclick="toggleLang()" title="Language">
@@ -97,9 +74,7 @@
         <div class="nav-brand">
             <img src="/static/logo.jpg" alt="Logo">
             <div>
-                <div class="nav-brand-text">
-                    {{ panel_name }}
-                </div>
+                <div class="nav-brand-text">{{ panel_name }}</div>
                 <div style="font-size: 11px; color: var(--text-muted);" data-i18n="panel_mgmt">مدیریت پنل</div>
             </div>
         </div>
@@ -115,6 +90,18 @@
         <a href="/users/add" class="nav-item {% if active_page == 'add' %}active{% endif %}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
             <span data-i18n="add_user">ساخت کاربر</span>
+        </a>
+        <a href="/traffic" class="nav-item {% if active_page == 'traffic' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span data-i18n="traffic">مصرف ترافیک</span>
+        </a>
+        <a href="/telegram" class="nav-item {% if active_page == 'telegram' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            <span data-i18n="telegram">بات تلگرام</span>
+        </a>
+        <a href="/settings" class="nav-item {% if active_page == 'settings' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span data-i18n="settings">تنظیمات</span>
         </a>
         <a href="/logout" class="nav-item" style="margin-top: auto;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
