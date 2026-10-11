@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fa" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ panel_name }}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/logo.jpg" type="image/jpeg">
+</head>
+<body>
+    {% if not hide_nav %}
+    <header class="header">
+        <div class="header-content">
+            <div class="brand-logo-wrap">
+                <img src="/static/logo.jpg" alt="Logo" class="panel-logo-img">
+                <span class="logo">{{ panel_name }}</span>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="toggleLang()" title="Language">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </button>
+                <button class="icon-btn" onclick="toggleTheme()" title="Theme">
+                    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+                </button>
+                <button class="icon-btn" onclick="toggleMenu()" title="Menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="overlay" onclick="toggleMenu()"></div>
+    <nav class="nav-menu">
+        <div class="nav-brand">
+            <img src="/static/logo.jpg" alt="Logo">
+            <div>
+                <div class="nav-brand-text">{{ panel_name }}</div>
+                <div style="font-size: 11px; color: var(--text-muted);" data-i18n="panel_mgmt">مدیریت پنل</div>
+            </div>
+        </div>
+
+        <a href="/dashboard" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span data-i18n="dashboard">داشبورد</span>
+        </a>
+        <a href="/users" class="nav-item {% if active_page == 'users' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span data-i18n="users">کاربران</span>
+        </a>
+        <a href="/users/add" class="nav-item {% if active_page == 'add' %}active{% endif %}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span data-i18n="add_user">ساخت کاربر</span>
+        </a>
+        <a href="/logout" class="nav-item" style="margin-top: auto;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span data-i18n="logout">خروج</span>
+        </a>
+    </nav>
+    {% endif %}
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="/static/app.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
