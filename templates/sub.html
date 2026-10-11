@@ -3,53 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐾 {{ user.username }} - CatWoman</title>
+    <title>{{ user.username }} - CatWoman</title>
     <link rel="stylesheet" href="/static/sub.css">
+    <link rel="icon" href="/static/logo.jpg">
 </head>
 <body>
     <div class="sub-container">
         <div class="sub-header">
-            <img src="/static/logo.jpg" alt="CatWoman" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #ff2d95; margin: 0 auto 10px; display: block; filter: drop-shadow(0 0 20px #ff2d95);">
+            <img src="/static/logo.jpg" alt="Logo" class="sub-logo-img">
             <div class="sub-brand">CatWoman</div>
-            <div class="sub-username">{{ user.emoji }} {{ user.username }}</div>
+            <div class="sub-username">{{ user.username }}</div>
         </div>
-        
+
         {% if is_active %}
-            <div class="status-banner">✨ سرویس شما فعال است ✨</div>
-            
+            <div class="status-banner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                سرویس شما فعال است
+            </div>
+
             <div class="info-grid">
                 <div class="info-box">
-                    <div class="info-emoji">💾</div>
+                    <div class="info-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                    </div>
                     <div class="info-main">
-                        {% if data_limit_gb > 0 %}
-                            {{ "%.2f"|format(data_limit_gb) }} GB
-                        {% else %}
-                            ∞
-                        {% endif %}
+                        {% if data_limit_gb > 0 %}{{ "%.1f"|format(data_limit_gb) }} GB{% else %}∞{% endif %}
                     </div>
                     <div class="info-sub">حجم کل</div>
                 </div>
                 <div class="info-box">
-                    <div class="info-emoji">📊</div>
+                    <div class="info-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </div>
                     <div class="info-main">{{ "%.2f"|format(data_used_gb) }} GB</div>
                     <div class="info-sub">مصرف شده</div>
                 </div>
                 <div class="info-box">
-                    <div class="info-emoji">⏰</div>
+                    <div class="info-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
                     <div class="info-main">{{ days_remaining(user.expiry_date) }}</div>
-                    <div class="info-sub">باقی‌مانده</div>
+                    <div class="info-sub">روز باقی‌مانده</div>
                 </div>
                 <div class="info-box">
-                    <div class="info-emoji">📡</div>
+                    <div class="info-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                    </div>
                     <div class="info-main">{{ user.protocol|upper }}</div>
                     <div class="info-sub">پروتکل</div>
                 </div>
             </div>
-            
+
             {% if data_limit_gb > 0 %}
             <div class="usage-section">
                 <div class="usage-title">
-                    <span>📊 میزان مصرف</span>
+                    <span>میزان مصرف</span>
                     <span>{{ "%.1f"|format(usage_percent) }}%</span>
                 </div>
                 <div class="usage-bar">
@@ -57,71 +65,75 @@
                 </div>
             </div>
             {% endif %}
-            
+
             <div class="config-section">
-                <div class="config-title">🔗 کانفیگ اختصاصی شما</div>
+                <div class="config-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    کانفیگ اختصاصی شما
+                </div>
                 <div class="config-text" id="configText">{{ config_link }}</div>
-                <button class="btn-pink" onclick="copyConfig()">📋 کپی کانفیگ</button>
-                <button class="btn-pink" onclick="copySub()" style="background: linear-gradient(135deg, #ff6ec7, #ff2d95);">🔗 کپی لینک ساب</button>
+                <button class="btn-sub" onclick="copyConfig()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    کپی کانفیگ
+                </button>
+                <button class="btn-sub secondary" onclick="copySub()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    کپی لینک ساب
+                </button>
             </div>
-            
+
         {% else %}
             <div class="expired-box">
                 <div class="expired-icon">
-                    {% if user.status == 'data_exhausted' %}📊
-                    {% elif user.status == 'expired' %}⏰
-                    {% else %}🚫{% endif %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
                 </div>
                 <div class="expired-title">سرویس غیرفعال است</div>
                 <div class="expired-text">{{ reason }}</div>
-                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ff3860;">
-                    <div style="color: #ff2d95; font-weight: 700;">
-                        📊 مصرف: {{ "%.2f"|format(data_used_gb) }} GB
-                        {% if data_limit_gb > 0 %}/ {{ "%.2f"|format(data_limit_gb) }} GB{% endif %}
-                    </div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--border-color); color: var(--text-primary); font-weight: 600;">
+                    مصرف: {{ "%.2f"|format(data_used_gb) }} GB
+                    {% if data_limit_gb > 0 %}/ {{ "%.2f"|format(data_limit_gb) }} GB{% endif %}
                 </div>
             </div>
         {% endif %}
-        
+
         <div class="apps-section">
-            <div class="apps-title">📱 اپلیکیشن‌های پیشنهادی</div>
+            <div class="apps-title">اپلیکیشن‌های پیشنهادی</div>
             <div class="app-item">
-                <span class="app-icon">🤖</span>
+                <div class="app-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
                 <span class="app-name">V2rayNG</span>
-                <span class="app-platform">اندروید</span>
+                <span class="app-platform">Android</span>
             </div>
             <div class="app-item">
-                <span class="app-icon">🍎</span>
+                <div class="app-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06z"/><path d="M10 2c1 .5 2 2 2 5"/></svg></div>
                 <span class="app-name">Streisand</span>
-                <span class="app-platform">آیفون</span>
+                <span class="app-platform">iOS</span>
             </div>
             <div class="app-item">
-                <span class="app-icon">💻</span>
+                <div class="app-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
                 <span class="app-name">v2rayN</span>
-                <span class="app-platform">ویندوز</span>
+                <span class="app-platform">Windows</span>
             </div>
             <div class="app-item">
-                <span class="app-icon">🚀</span>
+                <div class="app-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                 <span class="app-name">Happ</span>
-                <span class="app-platform">همه</span>
+                <span class="app-platform">All</span>
             </div>
         </div>
-        
-        <div class="footer">💗 Powered by CatWoman Panel 💗</div>
+
+        <div class="footer">Powered by CatWoman Panel</div>
     </div>
-    
+
     <script>
         function copyConfig() {
             const text = document.getElementById('configText').innerText;
             navigator.clipboard.writeText(text).then(() => {
-                alert('✅ کانفیگ کپی شد!');
+                alert('کانفیگ کپی شد');
             });
         }
-        
         function copySub() {
             const subLink = window.location.href + '/raw';
             navigator.clipboard.writeText(subLink).then(() => {
-                alert('✅ لینک ساب کپی شد!');
+                alert('لینک ساب کپی شد');
             });
         }
     </script>
