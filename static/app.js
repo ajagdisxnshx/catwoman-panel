@@ -18,6 +18,9 @@ const translations = {
         login_btn: "ورود به پنل",
         panel_mgmt: "مدیریت پنل",
         welcome: "خوش آمدید",
+        settings: "تنظیمات",
+        telegram: "بات تلگرام",
+        traffic: "مصرف ترافیک",
     },
     en: {
         dashboard: "Dashboard",
@@ -37,6 +40,9 @@ const translations = {
         login_btn: "Login to Panel",
         panel_mgmt: "Panel Management",
         welcome: "Welcome",
+        settings: "Settings",
+        telegram: "Telegram Bot",
+        traffic: "Traffic Monitor",
     }
 };
 
@@ -79,7 +85,6 @@ function toggleMenu() {
     menu?.classList.toggle('active');
     overlay?.classList.toggle('active');
     
-    // جلوگیری از اسکرول صفحه وقتی منو بازه
     if (menu?.classList.contains('active')) {
         document.body.style.overflow = 'hidden';
     } else {
@@ -87,7 +92,6 @@ function toggleMenu() {
     }
 }
 
-// بستن منو با کلید ESC
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         const menu = document.querySelector('.nav-menu');
@@ -97,7 +101,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Init on load
 document.addEventListener('DOMContentLoaded', () => {
     applyTheme(localStorage.getItem('theme') || 'dark');
     applyLang(localStorage.getItem('lang') || 'fa');
