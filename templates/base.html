@@ -7,116 +7,27 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" href="/static/logo.jpg" type="image/jpeg">
     
-    <!-- فونت خفن از گوگل -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Audiowide&display=swap" rel="stylesheet">
-    
-    <!-- استایل نئونی خفن برای اسم پنل و گربه متحرک -->
+    <!-- استایل بسیار ساده و ایمن فقط برای رنگ نئونی اسم و گربه بدون دستکاری چیدمان -->
     <style>
-        .brand-logo-wrap, .nav-brand {
-            position: relative;
-        }
-
         .logo, .nav-brand-text {
-            font-family: 'Orbitron', 'Audiowide', sans-serif !important;
-            font-weight: 900 !important;
-            font-size: 20px !important;
-            letter-spacing: 2px !important;
-            text-transform: uppercase;
-            color: #fff !important;
-            background: none !important;
-            -webkit-text-fill-color: #fff !important;
+            color: #ff79c6 !important; /* رنگ صورتی نئونی ملایم */
+            text-shadow: 0 0 8px rgba(255, 121, 198, 0.5); /* سایه درخشان */
             display: inline-flex !important;
             align-items: center;
-            gap: 10px;
-            padding: 4px 12px;
-            position: relative;
-            text-shadow: 
-                0 0 5px #fff,
-                0 0 10px #ff00ff,
-                0 0 20px #ff00ff,
-                0 0 40px #bd00ff,
-                0 0 80px #bd00ff;
-            animation: neonFlicker 3s infinite alternate;
+            gap: 6px;
         }
-
-        /* المان نئونی سمت چپ */
+        
+        /* اضافه کردن گربه متحرک به صورت کاملا ایمن قبل از اسم */
         .logo::before, .nav-brand-text::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 70%;
-            background: linear-gradient(180deg, transparent, #ff00ff, #00ffff, transparent);
-            box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-            animation: neonPulse 1.5s infinite;
-            border-radius: 2px;
-        }
-
-        /* المان نئونی سمت راست */
-        .logo::after, .nav-brand-text::after {
-            content: '';
-            position: absolute;
-            right: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 70%;
-            background: linear-gradient(180deg, transparent, #00ffff, #ff00ff, transparent);
-            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
-            animation: neonPulse 1.5s infinite 0.5s;
-            border-radius: 2px;
-        }
-
-        /* انیمیشن چشمک زدن نئون */
-        @keyframes neonFlicker {
-            0%, 100% {
-                text-shadow: 
-                    0 0 5px #fff,
-                    0 0 10px #ff00ff,
-                    0 0 20px #ff00ff,
-                    0 0 40px #bd00ff,
-                    0 0 80px #bd00ff;
-            }
-            50% {
-                text-shadow: 
-                    0 0 5px #fff,
-                    0 0 10px #00ffff,
-                    0 0 20px #00ffff,
-                    0 0 40px #00bfff,
-                    0 0 80px #00bfff;
-            }
-        }
-
-        /* انیمیشن پالس نئونی */
-        @keyframes neonPulse {
-            0%, 100% { opacity: 1; transform: translateY(-50%) scaleY(1); }
-            50% { opacity: 0.5; transform: translateY(-50%) scaleY(0.8); }
-        }
-
-        /* گربه متحرک */
-        .cat-sticker {
-            width: 32px;
-            height: 32px;
+            content: "";
             display: inline-block;
+            width: 22px;
+            height: 22px;
+            background-image: url('https://media.tenor.com/x8v1oNUOmg4AAAAi/vibing-cat-cat-jamming.gif');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
             vertical-align: middle;
-            filter: drop-shadow(0 0 8px #ff00ff) drop-shadow(0 0 15px #bd00ff);
-            animation: catDance 1.5s infinite ease-in-out;
-        }
-
-        @keyframes catDance {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            25% { transform: translateY(-4px) rotate(5deg); }
-            50% { transform: translateY(0) rotate(-5deg); }
-            75% { transform: translateY(-4px) rotate(5deg); }
-        }
-
-        /* برای فاصله اطراف نئون‌ها */
-        .brand-logo-wrap {
-            padding: 0 15px;
         }
     </style>
 </head>
@@ -126,12 +37,7 @@
         <div class="header-content">
             <div class="brand-logo-wrap">
                 <img src="/static/logo.jpg" alt="Logo" class="panel-logo-img">
-                <span class="logo">
-                    <img src="https://media.tenor.com/x8v1oNUOmg4AAAAi/vibing-cat-cat-jamming.gif" 
-                         onerror="this.onerror=null;this.src='https://cataas.com/cat/gif';" 
-                         class="cat-sticker" alt="cat">
-                    {{ panel_name }}
-                </span>
+                <span class="logo">{{ panel_name }}</span>
             </div>
             <div class="header-actions">
                 <button class="icon-btn" onclick="toggleLang()" title="Language">
@@ -152,13 +58,8 @@
         <div class="nav-brand">
             <img src="/static/logo.jpg" alt="Logo">
             <div>
-                <div class="nav-brand-text">
-                    <img src="https://media.tenor.com/x8v1oNUOmg4AAAAi/vibing-cat-cat-jamming.gif" 
-                         onerror="this.onerror=null;this.src='https://cataas.com/cat/gif';" 
-                         class="cat-sticker" alt="cat">
-                    {{ panel_name }}
-                </div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" data-i18n="panel_mgmt">مدیریت پنل</div>
+                <div class="nav-brand-text">{{ panel_name }}</div>
+                <div style="font-size: 11px; color: var(--text-muted);" data-i18n="panel_mgmt">مدیریت پنل</div>
             </div>
         </div>
 
