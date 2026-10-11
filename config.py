@@ -1,9 +1,9 @@
-# تنظیمات پیش‌فرض ادمین (بدون نیاز به Variable)
+# تنظیمات پیش‌فرض ادمین
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "admin"
 
 # کلید رمزنگاری سشن
-SECRET_KEY = "catwoman-super-secret-key-2024-neon-pink"
+SECRET_KEY = "catwoman-super-secret-key-2024-navy-neon"
 
 # تنظیمات Xray
 XRAY_CONFIG_PATH = "/usr/local/etc/xray/config.json"
@@ -14,4 +14,4 @@ PANEL_PORT = 8000
 XRAY_PORT = 10000
 
 # نام پنل
-PANEL_NAME = "CatWoman Panel 🐾"
+PANEL_NAME = "CatWoman"
