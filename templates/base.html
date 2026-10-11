@@ -7,26 +7,23 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" href="/static/logo.jpg" type="image/jpeg">
     
-    <!-- استایل بسیار ساده و ایمن فقط برای رنگ نئونی اسم و گربه بدون دستکاری چیدمان -->
+    <!-- لود کردن کتابخانه سبک و رسمی لاتی (Lottie) برای انیمیشن‌های نرم تلگرامی -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    
+    <!-- استایل نئونی کردن اسم پنل و تراز کردن انیمیشن گربه -->
     <style>
         .logo, .nav-brand-text {
-            color: #ff79c6 !important; /* رنگ صورتی نئونی ملایم */
-            text-shadow: 0 0 8px rgba(255, 121, 198, 0.5); /* سایه درخشان */
+            color: #ff79c6 !important; /* رنگ صورتی نئونی لوکس */
+            text-shadow: 0 0 10px rgba(255, 121, 198, 0.6), 0 0 20px rgba(189, 147, 249, 0.4);
+            font-weight: 800 !important;
             display: inline-flex !important;
-            align-items: center;
-            gap: 6px;
+            align-items: center !important;
+            gap: 8px; /* فاصله مناسب بین گربه و متن */
         }
         
-        /* اضافه کردن گربه متحرک به صورت کاملا ایمن قبل از اسم */
-        .logo::before, .nav-brand-text::before {
-            content: "";
+        /* سایز مناسب و بهینه برای گوشی */
+        lottie-player {
             display: inline-block;
-            width: 22px;
-            height: 22px;
-            background-image: url('https://media.tenor.com/x8v1oNUOmg4AAAAi/vibing-cat-cat-jamming.gif');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
             vertical-align: middle;
         }
     </style>
@@ -37,7 +34,11 @@
         <div class="header-content">
             <div class="brand-logo-wrap">
                 <img src="/static/logo.jpg" alt="Logo" class="panel-logo-img">
-                <span class="logo">{{ panel_name }}</span>
+                <span class="logo">
+                    <!-- انیمیشن گربه لاتی بسیار کیوت و سبک -->
+                    <lottie-player src="https://lottie.host/801a2386-7e3f-42a1-a6b4-21bd9e67d268/zSAsg5zLOm.json" background="transparent" speed="1.2" style="width: 28px; height: 28px;" loop autoplay></lottie-player>
+                    {{ panel_name }}
+                </span>
             </div>
             <div class="header-actions">
                 <button class="icon-btn" onclick="toggleLang()" title="Language">
@@ -58,7 +59,11 @@
         <div class="nav-brand">
             <img src="/static/logo.jpg" alt="Logo">
             <div>
-                <div class="nav-brand-text">{{ panel_name }}</div>
+                <div class="nav-brand-text">
+                    <!-- انیمیشن گربه لاتی داخل منوی بازشونده -->
+                    <lottie-player src="https://lottie.host/801a2386-7e3f-42a1-a6b4-21bd9e67d268/zSAsg5zLOm.json" background="transparent" speed="1.2" style="width: 24px; height: 24px;" loop autoplay></lottie-player>
+                    {{ panel_name }}
+                </div>
                 <div style="font-size: 11px; color: var(--text-muted);" data-i18n="panel_mgmt">مدیریت پنل</div>
             </div>
         </div>
