@@ -1,30 +1,38 @@
-from fastapi import FastAPI, Request, Form, HTTPException
-from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse, Response
+from fastapi import FastAPI, Request, Form, HTTPException, UploadFile, File
+from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse, Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 import time
 import asyncio
 import base64
+import shutil
+import os
 from contextlib import asynccontextmanager
+from datetime import datetime
 
-from config import (ADMIN_USERNAME, ADMIN_PASSWORD, SECRET_KEY, 
-                    PANEL_PORT, PANEL_NAME)
+from config import (SECRET_KEY, PANEL_PORT, PANEL_NAME,
+                    get_admin_credentials, update_admin_credentials,
+                    get_telegram_settings, update_telegram_settings)
 from database import (init_db, get_all_users, get_user_by_id, get_user_by_sub_token,
                       create_user, update_user, delete_user, reset_traffic,
-                      toggle_user_status, get_stats, check_users_limits)
+                      toggle_user_status, get_stats, check_users_limits,
+                      get_online_users, get_online_count, get_top_users,
+                      get_traffic_history, record_daily_traffic, DB_PATH)
 from xray_manager import (generate_xray_config, restart_xray, is_xray_running,
-                          generate_vless_link, collect_traffic_stats)
+                          generate_vless_link, collect_traffic_stats, get_server_info)
+from telegram_bot import bot_runner, test_bot_connection
 
 async def periodic_check():
     while True:
         try:
-            # ابتدا دریافت مصرف واقعی کاربر از اکس‌ری و ثبت آن در دیتابیس
             collect_traffic_stats()
-            # سپس اعمال محدودیت ترافیک و انقضا کلاینت‌ها
             check_users_limits()
-            # تولید کانفیگ جدید بر اساس تغییرات
             generate_xray_config()
+            
+            # ثبت ترافیک روزانه
+            stats = get_stats()
+            record_daily_traffic(stats["total_traffic"])
         except Exception as e:
             print(f"خطا در بررسی چرخه‌ای: {e}")
         await asyncio.sleep(30)
@@ -34,9 +42,16 @@ async def lifespan(app: FastAPI):
     init_db()
     generate_xray_config()
     restart_xray()
+    
+    # شروع ربات تلگرام
+    tg_settings = get_telegram_settings()
+    if tg_settings["enabled"] and tg_settings["token"]:
+        bot_runner.start()
+    
     task = asyncio.create_task(periodic_check())
     yield
     task.cancel()
+    bot_runner.stop()
 
 app = FastAPI(lifespan=lifespan)
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
@@ -64,6 +79,18 @@ def days_remaining(expiry):
         return "0"
     return f"{int(diff / 86400)}"
 
+def time_ago(timestamp):
+    if timestamp == 0:
+        return "هرگز"
+    diff = int(time.time()) - timestamp
+    if diff < 60:
+        return f"{diff} ثانیه پیش"
+    if diff < 3600:
+        return f"{diff // 60} دقیقه پیش"
+    if diff < 86400:
+        return f"{diff // 3600} ساعت پیش"
+    return f"{diff // 86400} روز پیش"
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     if not is_logged_in(request):
@@ -78,7 +105,8 @@ async def login_page(request: Request):
 
 @app.post("/login")
 async def login_action(request: Request, username: str = Form(...), password: str = Form(...)):
-    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+    admin_user, admin_pass = get_admin_credentials()
+    if username == admin_user and password == admin_pass:
         request.session["logged_in"] = True
         return RedirectResponse("/dashboard", status_code=303)
     return templates.TemplateResponse("login.html", {
@@ -108,11 +136,19 @@ async def users_page(request: Request):
     if not is_logged_in(request):
         return RedirectResponse("/login")
     users = get_all_users()
+    online_users = get_online_users(60)
     return templates.TemplateResponse("users.html", {
         "request": request, "panel_name": PANEL_NAME, "users": users,
+        "online_users": online_users, "online_count": len(online_users),
         "format_bytes": format_bytes, "days_remaining": days_remaining,
-        "active_page": "users"
+        "time_ago": time_ago, "active_page": "users"
     })
+
+@app.get("/api/online-count")
+async def api_online_count(request: Request):
+    if not is_logged_in(request):
+        return {"count": 0}
+    return {"count": get_online_count(60)}
 
 @app.get("/users/add", response_class=HTMLResponse)
 async def add_user_page(request: Request):
@@ -208,6 +244,158 @@ async def toggle_user(request: Request, user_id: str):
     restart_xray()
     return RedirectResponse("/users", status_code=303)
 
+# ======== SETTINGS ========
+@app.get("/settings", response_class=HTMLResponse)
+async def settings_page(request: Request):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    admin_user, _ = get_admin_credentials()
+    server_info = get_server_info()
+    return templates.TemplateResponse("settings.html", {
+        "request": request, "panel_name": PANEL_NAME,
+        "admin_username": admin_user, "server_info": server_info,
+        "format_bytes": format_bytes, "active_page": "settings",
+        "success": request.session.pop("settings_success", None),
+        "error": request.session.pop("settings_error", None)
+    })
+
+@app.post("/settings/change-credentials")
+async def change_credentials(
+    request: Request,
+    current_password: str = Form(...),
+    new_username: str = Form(...),
+    new_password: str = Form(...),
+    confirm_password: str = Form(...)
+):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    
+    _, current = get_admin_credentials()
+    if current_password != current:
+        request.session["settings_error"] = "رمز فعلی اشتباه است!"
+        return RedirectResponse("/settings", status_code=303)
+    
+    if new_password != confirm_password:
+        request.session["settings_error"] = "رمز جدید و تکرار آن یکسان نیست!"
+        return RedirectResponse("/settings", status_code=303)
+    
+    if len(new_password) < 4:
+        request.session["settings_error"] = "رمز باید حداقل ۴ کاراکتر باشد!"
+        return RedirectResponse("/settings", status_code=303)
+    
+    update_admin_credentials(new_username, new_password)
+    request.session["settings_success"] = "اطلاعات ادمین با موفقیت تغییر کرد!"
+    return RedirectResponse("/settings", status_code=303)
+
+@app.get("/settings/restart-xray")
+async def restart_xray_action(request: Request):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    restart_xray()
+    request.session["settings_success"] = "هسته Xray با موفقیت ری‌استارت شد!"
+    return RedirectResponse("/settings", status_code=303)
+
+@app.get("/settings/backup")
+async def backup_db(request: Request):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    if not os.path.exists(DB_PATH):
+        return PlainTextResponse("دیتابیس یافت نشد", status_code=404)
+    filename = f"catwoman_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db"
+    return FileResponse(DB_PATH, filename=filename, media_type="application/octet-stream")
+
+@app.post("/settings/restore")
+async def restore_db(request: Request, backup_file: UploadFile = File(...)):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    try:
+        content = await backup_file.read()
+        with open(DB_PATH, "wb") as f:
+            f.write(content)
+        generate_xray_config()
+        restart_xray()
+        request.session["settings_success"] = "دیتابیس با موفقیت بازیابی شد!"
+    except Exception as e:
+        request.session["settings_error"] = f"خطا در بازیابی: {e}"
+    return RedirectResponse("/settings", status_code=303)
+
+# ======== TELEGRAM BOT ========
+@app.get("/telegram", response_class=HTMLResponse)
+async def telegram_page(request: Request):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    settings = get_telegram_settings()
+    return templates.TemplateResponse("telegram.html", {
+        "request": request, "panel_name": PANEL_NAME,
+        "settings": settings, "active_page": "telegram",
+        "success": request.session.pop("tg_success", None),
+        "error": request.session.pop("tg_error", None)
+    })
+
+@app.post("/telegram/save")
+async def save_telegram(
+    request: Request,
+    token: str = Form(""),
+    admin_id: str = Form(""),
+    enabled: str = Form("off")
+):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    is_enabled = enabled == "on"
+    update_telegram_settings(token.strip(), admin_id.strip(), is_enabled)
+    
+    if is_enabled and token:
+        bot_runner.start()
+    else:
+        bot_runner.stop()
+    
+    request.session["tg_success"] = "تنظیمات ربات ذخیره شد!"
+    return RedirectResponse("/telegram", status_code=303)
+
+@app.post("/telegram/test")
+async def test_telegram(
+    request: Request,
+    token: str = Form(...),
+    admin_id: str = Form(...)
+):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    success, result = test_bot_connection(token.strip(), admin_id.strip())
+    if success:
+        request.session["tg_success"] = f"اتصال موفق! نام ربات: @{result}"
+    else:
+        request.session["tg_error"] = f"خطا در اتصال: {result}"
+    return RedirectResponse("/telegram", status_code=303)
+
+# ======== TRAFFIC MONITOR ========
+@app.get("/traffic", response_class=HTMLResponse)
+async def traffic_page(request: Request):
+    if not is_logged_in(request):
+        return RedirectResponse("/login")
+    
+    history_7 = get_traffic_history(7)
+    history_30 = get_traffic_history(30)
+    top_users = get_top_users(5)
+    stats = get_stats()
+    
+    # محاسبه مصرف امروز
+    today_traffic = 0
+    if history_7:
+        today_traffic = history_7[0]["total_traffic"] if len(history_7) > 0 else 0
+    
+    # تبدیل برای نمودار
+    chart_labels = [h["date"] for h in reversed(history_7)]
+    chart_data = [round(h["total_traffic"] / 1073741824, 2) for h in reversed(history_7)]
+    
+    return templates.TemplateResponse("traffic.html", {
+        "request": request, "panel_name": PANEL_NAME,
+        "stats": stats, "today_traffic": today_traffic,
+        "top_users": top_users, "chart_labels": chart_labels,
+        "chart_data": chart_data, "format_bytes": format_bytes,
+        "active_page": "traffic"
+    })
+
+# ======== SUBSCRIPTION ========
 @app.get("/sub/{token}")
 async def subscription(request: Request, token: str):
     user = get_user_by_sub_token(token)
