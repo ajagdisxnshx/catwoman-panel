@@ -5,18 +5,16 @@ import time
 from config import XRAY_CONFIG_PATH, XRAY_BINARY_PATH, XRAY_PORT
 from database import get_all_users, update_traffic
 
-# پورت داخلی API مانیتورینگ ترافیک اکس‌ری
 XRAY_API_PORT = 10085
 
 def generate_xray_config():
-    """تولید فایل کانفیگ Xray به همراه سیستم مانیتورینگ ترافیک (نسخه اصلاح‌شده)"""
+    """تولید فایل کانفیگ Xray"""
     try:
         users = get_all_users()
     except Exception as e:
         print(f"خطا در خواندن کاربران: {e}")
         users = []
 
-    # فیلتر کاربران فعال
     clients = []
     for u in users:
         u_dict = dict(u)
@@ -25,12 +23,10 @@ def generate_xray_config():
                 "id": u_dict.get("uuid"),
                 "email": u_dict.get("username", "")
             }
-            # اضافه کردن flow فقط اگر مقدار داشته باشد
             if u_dict.get("flow"):
                 client_data["flow"] = u_dict.get("flow")
             clients.append(client_data)
 
-    # اگر هیچ کاربر فعالی نبود، یک کلاینت پیش‌فرض اضافه کن تا هسته کرش نکند
     if not clients:
         clients.append({
             "id": "00000000-0000-0000-0000-000000000000",
@@ -119,7 +115,7 @@ def generate_xray_config():
 
 
 def collect_traffic_stats():
-    """خوانش حجم مصرفی کلاینت‌ها از API داخلی اکس‌ری و به‌روزرسانی دیتابیس"""
+    """خوانش ترافیک + ثبت کاربران آنلاین"""
     try:
         res = subprocess.run(
             [XRAY_BINARY_PATH, "api", "statsquery", 
@@ -159,7 +155,6 @@ def collect_traffic_stats():
 
 
 def is_xray_running():
-    """بررسی وضعیت اجرای پروسه Xray"""
     try:
         res = subprocess.run(["pgrep", "-f", XRAY_BINARY_PATH], 
                              capture_output=True, text=True)
@@ -169,7 +164,6 @@ def is_xray_running():
 
 
 def restart_xray():
-    """ری‌استارت هسته Xray"""
     try:
         subprocess.run(["pkill", "-9", "-f", XRAY_BINARY_PATH], capture_output=True)
         time.sleep(0.5)
@@ -187,7 +181,6 @@ def restart_xray():
 
 
 def generate_vless_link(user, host):
-    """ساخت لینک سابسکریپشن و اتصال VLESS WebSocket"""
     u_dict = dict(user)
     uuid = u_dict.get("uuid")
     username = u_dict.get("username", "user")
@@ -201,3 +194,37 @@ def generate_vless_link(user, host):
         f"&path=%2Fcatwoman-ws"
         f"#{username}"
     )
+
+
+def get_server_info():
+    """دریافت اطلاعات سرور"""
+    try:
+        import psutil
+        
+        cpu = psutil.cpu_percent(interval=0.5)
+        mem = psutil.virtual_memory()
+        disk = psutil.disk_usage('/')
+        
+        boot_time = psutil.boot_time()
+        uptime_seconds = int(time.time() - boot_time)
+        days = uptime_seconds // 86400
+        hours = (uptime_seconds % 86400) // 3600
+        minutes = (uptime_seconds % 3600) // 60
+        uptime_str = f"{days}d {hours}h {minutes}m"
+        
+        return {
+            "cpu_percent": cpu,
+            "ram_percent": mem.percent,
+            "ram_used": mem.used,
+            "ram_total": mem.total,
+            "disk_percent": disk.percent,
+            "disk_used": disk.used,
+            "disk_total": disk.total,
+            "uptime": uptime_str
+        }
+    except Exception as e:
+        print(f"خطا در دریافت اطلاعات سرور: {e}")
+        return {
+            "cpu_percent": 0, "ram_percent": 0, "ram_used": 0, "ram_total": 0,
+            "disk_percent": 0, "disk_used": 0, "disk_total": 0, "uptime": "N/A"
+        }
