@@ -8,18 +8,15 @@
 </head>
 <body>
     <div class="sub-container">
-        <!-- Header -->
         <div class="sub-header">
-            <div class="sub-logo">🐱‍👤</div>
+            <img src="/static/logo.jpg" alt="CatWoman" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 3px solid #ff2d95; margin: 0 auto 10px; display: block; filter: drop-shadow(0 0 20px #ff2d95);">
             <div class="sub-brand">CatWoman</div>
             <div class="sub-username">{{ user.emoji }} {{ user.username }}</div>
         </div>
         
         {% if is_active %}
-            <!-- وضعیت فعال -->
             <div class="status-banner">✨ سرویس شما فعال است ✨</div>
             
-            <!-- اطلاعات -->
             <div class="info-grid">
                 <div class="info-box">
                     <div class="info-emoji">💾</div>
@@ -50,7 +47,6 @@
             </div>
             
             {% if data_limit_gb > 0 %}
-            <!-- نوار مصرف -->
             <div class="usage-section">
                 <div class="usage-title">
                     <span>📊 میزان مصرف</span>
@@ -62,7 +58,6 @@
             </div>
             {% endif %}
             
-            <!-- کانفیگ -->
             <div class="config-section">
                 <div class="config-title">🔗 کانفیگ اختصاصی شما</div>
                 <div class="config-text" id="configText">{{ config_link }}</div>
@@ -71,7 +66,6 @@
             </div>
             
         {% else %}
-            <!-- وضعیت غیرفعال -->
             <div class="expired-box">
                 <div class="expired-icon">
                     {% if user.status == 'data_exhausted' %}📊
@@ -89,7 +83,6 @@
             </div>
         {% endif %}
         
-        <!-- اپلیکیشن‌ها -->
         <div class="apps-section">
             <div class="apps-title">📱 اپلیکیشن‌های پیشنهادی</div>
             <div class="app-item">
