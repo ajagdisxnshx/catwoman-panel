@@ -1,33 +1,49 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود - {{ panel_name }}</title>
+    <title>Login - {{ panel_name }}</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/logo.jpg">
 </head>
 <body>
     <div class="login-wrapper">
+        <div class="login-top-actions">
+            <button class="icon-btn" onclick="toggleLang()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </button>
+            <button class="icon-btn" onclick="toggleTheme()">
+                <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+            </button>
+        </div>
+
         <div class="login-box">
-            <img src="/static/logo.jpg" alt="CatWoman" class="login-avatar-img">
+            <img src="/static/logo.jpg" alt="Logo" class="login-avatar-img">
             <h1 class="login-title">{{ panel_name }}</h1>
-            
+            <p class="login-subtitle" data-i18n="welcome">به پنل مدیریت خوش آمدید</p>
+
             {% if error %}
             <div class="alert alert-danger">{{ error }}</div>
             {% endif %}
-            
+
             <form method="POST" action="/login">
                 <div class="form-group">
-                    <label class="form-label">👤 نام کاربری</label>
+                    <label class="form-label" data-i18n="username">نام کاربری</label>
                     <input type="text" name="username" class="form-control" required autocomplete="username">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">🔐 رمز عبور</label>
+                    <label class="form-label" data-i18n="password">رمز عبور</label>
                     <input type="password" name="password" class="form-control" required autocomplete="current-password">
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">ورود به پنل 💗</button>
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    <span data-i18n="login_btn">ورود به پنل</span>
+                </button>
             </form>
         </div>
     </div>
+
+    <script src="/static/app.js"></script>
 </body>
 </html>
